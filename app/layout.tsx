@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Pathway_Extreme } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const inter = Inter({ subsets: ["latin"] });
+const pathway = Pathway_Extreme({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "File Tracka",
@@ -21,7 +22,7 @@ export default function RootLayout({
         <head>
           <link rel="icon" href="/favicon.ico" sizes="any" />
         </head>
-        <body className={inter.className}>{children}</body>
+        <body className={pathway.className}>{children}</body>
       </html>
     </UserProvider>
   );
