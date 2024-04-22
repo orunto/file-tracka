@@ -1,5 +1,7 @@
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Pathway+Extreme:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -16,7 +18,7 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-family: inherit!important;
+	font-family: "Pathway Extreme", sans-serif;
 	vertical-align: baseline;
   text-decoration: none;
   color: inherit;

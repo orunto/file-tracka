@@ -1,5 +1,6 @@
 'use client'
 import Dropdown from '@/components/atoms/Dropdown';
+import Button from '@/components/atoms/Button';
 import SearchBar from '@/components/atoms/SearchBar';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import content from '@/lib/dropdown-content.json'
@@ -39,6 +40,10 @@ export default function Registry() {
                             <Dropdown name={`Action Taken`} content={content.Actions.Registry}/>
                             <SearchBar/>
                         </div>
+                    </section>
+
+                    <section className='flex flex-col items-end w-full box-border'>
+                        <Button onclick="">Assign a New File</Button>
                     </section>
                 </main>
             </>
