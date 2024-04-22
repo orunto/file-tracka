@@ -13,7 +13,7 @@ export default function DirectorBudget() {
     return (
         user && (
             <>
-                <Header user_role={`Beta Tester`} username={user.name} page={`Director of Budgets`} />
+                <Header user_role={`Beta Tester`} username={user.name} page={`Honorable Commissioner`} />
 
                 <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
                     <section className='box-border flex flex-col gap-4 w-full'>
@@ -22,7 +22,7 @@ export default function DirectorBudget() {
                         <div className='flex gap-4'>
                             <Dropdown name={`MDAS`} content={content.MDAS} />
                             <Dropdown name={`Groups`} content={content.Groups} />
-                            <Dropdown name={`Action Taken`} content={content.Actions['Director Budgets']} />
+                            <Dropdown name={`Action Taken`} content={content.Actions['Honorable Commissioner\'s Office']} />
                             <SearchBar />
                         </div>
                     </section>

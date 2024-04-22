@@ -31,11 +31,11 @@ button, input {
   cursor: pointer;
 }
 
-body {
+/* body {
   height: 100vh;
   overflow-y: hidden;
   width: 100vw;
-}
+} */
 
 select {
   width: min-content;
@@ -45,6 +45,10 @@ select {
 
 option {
   font-family: inherit!important;
+}
+
+tr {
+  border: 0.5px solid rgb(187, 187, 187);
 }
 
 @media (max-width: 500px) {
