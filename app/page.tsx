@@ -1,11 +1,17 @@
 'use client'
 import Button from "@/components/atoms/Button";
 import Image from "next/image";
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useEffect } from "react";
 
 export default function Home() {
+  const { user, error, isLoading } = useUser();
+
+  console.log(user)
+  
   return (
     <>
-      <nav className="border-box flex justify-between items-center m-0 px-36 py-6">
+      <nav className="box-border flex justify-between items-center m-0 px-36 py-6">
         <a href="/" className="m-0 text-green-400 text-4xl font-black">FILE TRACKA</a>
 
         <ul className="flex gap-8 items-center m-0">

@@ -16,7 +16,7 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-family: inherit;
+	font-family: inherit!important;
 	vertical-align: baseline;
   text-decoration: none;
   color: inherit;
@@ -24,7 +24,7 @@ time, mark, audio, video {
   scroll-behavior: smooth;
 }
 
-button {
+button, input {
   font-family: inherit!important;
   cursor: pointer;
 }
@@ -32,6 +32,17 @@ button {
 body {
   height: 100vh;
   overflow-y: hidden;
+  width: 100vw;
+}
+
+select {
+  width: min-content;
+  font-family: inherit!important;
+  max-width: 240px;
+}
+
+option {
+  font-family: inherit!important;
 }
 
 @media (max-width: 500px) {

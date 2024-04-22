@@ -1,0 +1,46 @@
+{
+    "MDAS": [
+        "Bureau Of Information Technology",
+        "Bureau Of Job Creation",   
+        "Bureau Of Local Government Pensions",   
+        "Bureau Of Political Affairs And Administration",   
+        "Bureau Of Public Procurement",   
+        "Bureau Of Public Service Reforms",   
+        "Office Of The Accountant-General",   
+        "Office Of The Auditor General Local Government", 
+        "Office Of The Auditor General Of Ogun State",
+        "OGADEP",
+        "Ogun State Hospitals Management Board",
+        "Ogun State Independent Electoral Commission",
+        "Ogun State Internal Revenue Service",
+        "Ogun State Primary Health Care Development Board",
+        "Ogun State Rural Water Supply And Sanitation Agency",  
+        "SUBEB",
+        "TESCOM"
+    ],
+    "Groups": ["A", "B", "C", "D"],
+    "Actions": {
+        "Registry": [
+            "Assigned",
+            "Returned",
+            "Sent for Completion"
+        ],
+        "Groups": [
+            "Appraised",
+            "Returned",
+            "Process Completed"
+        ],
+        "Director Budgets": [
+            "Recommended",
+            "Not Recommended"
+        ],
+        "Permanent Secretary": [
+            "Recommended",
+            "Not Recommended"
+        ],
+        "Honorable Commissioner's Office": [
+            "Approved",
+            "Not Approved"
+        ]
+    }
+}
