@@ -13,7 +13,7 @@ export default function PermanentSecretary() {
     const { user, error, isLoading } = useUser();
 
     if (user) {
-        if (user.sub != process.env.AUTH_PS_ID) {
+        if (user.sub != process.env.AUTH0_PS_ID) {
             window.location.assign('/')
         }
 
@@ -28,9 +28,9 @@ export default function PermanentSecretary() {
                             <header className='text-xl font-semibold'>Filters</header>
 
                             <div className='flex gap-4'>
-                                <Dropdown name={`MDAS`} content={content.MDAS} />
-                                <Dropdown name={`Groups`} content={content.Groups} />
-                                <Dropdown name={`Action Taken`} content={content.Actions['Permanent Secretary']} />
+                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS} />
+                                <Dropdown placeholder={`Groups`} name={`Groups`} content={content.Groups} />
+                                <Dropdown placeholder={`Action Taken`} name={`Action Taken`} content={content.Actions['Permanent Secretary']} />
                                 <SearchBar />
                             </div>
                         </section>

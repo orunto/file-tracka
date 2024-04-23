@@ -47,6 +47,10 @@ option {
   font-family: inherit!important;
 }
 
+#button_holder button:nth-child(1) {
+  background-color: #AF202D;
+}
+
 tr {
   border: 0.5px solid rgb(187, 187, 187);
 }

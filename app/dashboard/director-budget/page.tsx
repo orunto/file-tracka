@@ -28,9 +28,9 @@ export default function DirectorBudget() {
                             <header className='text-xl font-semibold'>Filters</header>
 
                             <div className='flex gap-4'>
-                                <Dropdown name={`MDAS`} content={content.MDAS} />
-                                <Dropdown name={`Groups`} content={content.Groups} />
-                                <Dropdown name={`Action Taken`} content={content.Actions['Director Budgets']} />
+                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS} />
+                                <Dropdown placeholder={`Days`} name={`Days`} content={content.Groups} />
+                                <Dropdown placeholder={`Action Taken`} name={`Action Taken`} content={content.Actions['Director Budgets']} />
                                 <SearchBar />
                             </div>
                         </section>

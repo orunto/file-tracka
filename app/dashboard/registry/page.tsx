@@ -10,10 +10,12 @@ let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Recei
 import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
 import Image from 'next/image';
 import AssignModal from '@/components/molecules/AssignModal';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Registry() {
     const { user, error, isLoading } = useUser();
+
+    const [assign, setAssign] = useState(false)
 
     // useEffect(() => {
     // }, [user])
@@ -33,15 +35,15 @@ export default function Registry() {
                             <header className='text-xl font-semibold'>Filters</header>
 
                             <div className='flex gap-4'>
-                                <Dropdown name={`MDAS`} content={content.MDAS} />
-                                <Dropdown name={`Groups`} content={content.Groups} />
-                                <Dropdown name={`Action Taken`} content={content.Actions.Registry} />
+                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS} />
+                                <Dropdown placeholder={`Groups`} name={`Groups`} content={content.Groups} />
+                                <Dropdown placeholder={`Action Taken`} name={`Action Taken`} content={content.Actions.Registry} />
                                 <SearchBar />
                             </div>
                         </section>
 
                         <section className='flex flex-col items-end w-full box-border gap-8'>
-                            <Button onclick="">
+                            <Button onclick={() => setAssign(true)}>
                                 Assign a New File
                                 <Image src={sendIcon} alt='' />
                             </Button>
@@ -50,7 +52,12 @@ export default function Registry() {
                         </section>
                     </main>
 
-                    {/* <AssignModal/> */}
+                    {
+                        assign && (
+                            <AssignModal cancel={() => setAssign(false)} assign={''} />
+
+                        )
+                    }
                 </>
             )
 
