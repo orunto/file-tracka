@@ -2,24 +2,33 @@
 import Button from "@/components/atoms/Button";
 import Image from "next/image";
 import { useUser } from '@auth0/nextjs-auth0/client';
+import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
+import helpIcon from '@/public/icons/white-material-symbols_help.svg'
+import supportIcon from '@/public/icons/white-streamline_customer-support-1-solid.svg'
 import { useEffect } from "react";
 
 export default function Home() {
   const { user, error, isLoading } = useUser();
 
   console.log(user)
-  
+
   return (
     <>
       <nav className="box-border flex justify-between items-center m-0 px-36 py-6">
         <a href="/" className="m-0 text-green-400 text-4xl font-black">FILE TRACKA</a>
 
         <ul className="flex gap-8 items-center m-0">
-          <a href="/" className="flex items-center justify-center px-6 py-3 bg-green-700 text-base text-gray-50 rounded">Help</a>
-          <a href="/" className="flex items-center justify-center px-6 py-3 bg-green-700 text-base text-gray-50 rounded">Contact Support</a>
+          <a href="/" className="flex gap-2 items-center justify-center px-6 py-3 bg-green-700 text-base text-gray-50 rounded">
+            <Image src={helpIcon} alt='' />
+            Help
+          </a>
+          <a href="/" className="flex gap-2 items-center justify-center px-6 py-3 bg-green-700 text-base text-gray-50 rounded">
+            <Image src={supportIcon} alt='' />
+            Contact Support
+          </a>
         </ul>
       </nav>
-      <main className="flex min-h-screen flex-col items-center gap-10 px-36 mt-20">
+      <main className="flex flex-col items-center gap-10 px-36 mt-20">
         <h1 className="text-center text-7xl font-bold">
           <em className="not-italic text-green-400">Budget File Tracking </em>
           at Your Finger Tips
@@ -29,6 +38,8 @@ export default function Home() {
 
         <Button onclick={() => window.location.assign('/api/auth/login')}>
           Get Started
+          <Image src={sendIcon} alt='' />
+
         </Button>
       </main>
     </>
