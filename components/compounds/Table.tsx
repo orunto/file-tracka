@@ -8,7 +8,8 @@ let row = [`Bureau of Information Technology`, `A`, `General Expenditures and`, 
 
 interface props {
     actions: any[],
-    headers: any[]
+    headers: any[],
+    view: any
 }
 export default function Table(props: props) {
     return (
@@ -38,7 +39,7 @@ export default function Table(props: props) {
 
 
 
-                        <td className="flex items-center gap-2 cursor-pointer whitespace-nowrap overflow-hidden p-4 justify-start w-full text-green-500 text-base font-medium">
+                        <td className="flex items-center gap-2 cursor-pointer whitespace-nowrap overflow-hidden p-4 justify-start w-full text-green-500 text-base font-medium" onClick={props.view}>
                             View
                             <Image src={eyeIcon} alt="" />
                         </td>

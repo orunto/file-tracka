@@ -6,11 +6,14 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import content from '@/lib/dropdown-content.json'
 import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
+import DetailsModal from '@/components/molecules/DetailsModal';
+import { useState } from 'react';
 let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
 
 
 export default function Groups() {
     const { user, error, isLoading } = useUser();
+    const [view, setView] = useState(false)
 
     if (user) {
         if (user.sub == process.env.AUTH0_GROUPA_ID || process.env.AUTH0_GROUPB_ID || process.env.AUTH0_GROUPC_ID || process.env.AUTH0_GROUPD_ID)  {
@@ -31,10 +34,17 @@ export default function Groups() {
                         </section>
     
                         <section className='flex flex-col items-end w-full box-border gap-8'>
-                            <Table headers={header} actions={content.Actions.Groups} />
+                            <Table headers={header} actions={content.Actions.Groups} view={() => setView(true)} />
     
                         </section>
                     </main>
+
+                    {
+                        view && (
+                            <DetailsModal content={content.Actions.Groups} cancel={() => setView(false)}/>
+                        )
+                    }
+
                 </>
             )
         }
