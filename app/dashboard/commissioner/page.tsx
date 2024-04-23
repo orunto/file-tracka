@@ -7,6 +7,8 @@ import content from '@/lib/dropdown-content.json'
 import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
 let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
+let row = [`Bureau of Information Technology`, `A`, `General Expenditures and`, `0000001`, `20,000,000.00`, `18/04/2024`,]
+
 import { useState } from 'react';
 
 
@@ -39,7 +41,7 @@ export default function DirectorBudget() {
                         </section>
 
                         <section className='flex flex-col items-end w-full box-border gap-8'>
-                            <Table view={() => setView(false)} headers={header} actions={content.Actions['Honorable Commissioner\'s Office']} />
+                            <Table content={row} view={() => setView(false)} headers={header} actions={content.Actions['Honorable Commissioner\'s Office']} />
                         </section>
                     </main>
                 </>

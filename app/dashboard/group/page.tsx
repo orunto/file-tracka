@@ -8,7 +8,8 @@ import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
 import DetailsModal from '@/components/molecules/DetailsModal';
 import { useState } from 'react';
-let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
+let header = [`MDA`, `File Title`, `File Number`, `Amount`, `Date Received`, `Days Spent`, `Action Taken`, ``]
+let row = [`Bureau of Information Technology`, `General Expenditures and`, `0000001`, `20,000,000.00`, `18/04/2024`, `2`]
 
 
 export default function Groups() {
@@ -34,14 +35,14 @@ export default function Groups() {
                         </section>
     
                         <section className='flex flex-col items-end w-full box-border gap-8'>
-                            <Table headers={header} actions={content.Actions.Groups} view={() => setView(true)} />
+                            <Table content={row} headers={header} actions={content.Actions.Groups} view={() => setView(true)} />
     
                         </section>
                     </main>
 
                     {
                         view && (
-                            <DetailsModal content={content.Actions.Groups} cancel={() => setView(false)}/>
+                            <DetailsModal days={row[5]} date={row[4]} amount={row[3]} number={row[2]} title={row[1]} mda={row[0]} content={content.Actions.Groups} cancel={() => setView(false)}/>
                         )
                     }
 

@@ -6,7 +6,13 @@ import Button from '../atoms/Button'
 
 interface props {
     cancel: any,
-    content: any[]
+    content: any[],
+    date: any,
+    days: any,
+    title: any,
+    number: any,
+    amount: any,
+    mda: any
 }
 
 export default function DetailsModal(props: props) {
@@ -27,28 +33,33 @@ export default function DetailsModal(props: props) {
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
+                    <label htmlFor="mda">MDA</label>
+                    <input type="text" name="mda" id="mda" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.mda} />
+                </fieldset>
+
+                <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="date">Date Received</label>
-                    <input type="text" name="date" id="date" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder='DD / MM / YYYY' />
+                    <input type="text" name="date" id="date" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.date} />
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="days">Days Spent</label>
-                    <input type="text" name="days" id="days" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder='DD / MM / YYYY' />
+                    <input type="text" name="days" id="days" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.days} />
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="title">File Title</label>
-                    <input type="text" name="title" id="title" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder='Enter file title...' />
+                    <input type="text" name="title" id="title" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.title} />
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="file_number">File Number</label>
-                    <input type="text" name="file_number" id="file_number" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder='Enter file number...' />
+                    <input type="text" name="file_number" id="file_number" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.number} />
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="amount">Amount</label>
-                    <input type="text" name="amount" id="amount" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder='N000,000,000' />
+                    <input type="text" name="amount" id="amount" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.amount} />
                 </fieldset>
 
                 <fieldset className='flex gap-4 w-full justify-end' id='button_holder'>

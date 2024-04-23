@@ -9,7 +9,7 @@ interface props {
     cancel: any,
     assign: any
 }
-export default function Modal( props: props ) {
+export default function Modal(props: props) {
     return (
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <form className="flex flex-col gap-8 px-12 py-20 bg-white rounded-2xl max-h-96 overflow-y-scroll" action="" style={{ width: 'max-content' }}>
@@ -28,7 +28,7 @@ export default function Modal( props: props ) {
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="group">Assigned Group</label>
-                    <input type="text" name="group" id="group" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder='Group' />
+                    <input type="text" name="group" id="group" className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder='Group' />
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
@@ -52,7 +52,7 @@ export default function Modal( props: props ) {
                 </fieldset>
 
                 <fieldset className='flex gap-4 w-full justify-end' id='button_holder'>
-                <Button onclick={props.cancel}>
+                    <Button onclick={props.cancel}>
                         Cancel
                     </Button>
                     <Button onclick={props.assign}>

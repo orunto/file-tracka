@@ -14,6 +14,9 @@ dependencies:
   next:
     specifier: 14.2.1
     version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
+  notiflix:
+    specifier: ^3.2.7
+    version: 3.2.7
   react:
     specifier: ^18
     version: 18.2.0
@@ -2072,6 +2075,10 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /notiflix@3.2.7:
+    resolution: {integrity: sha512-NRu6KSeyfphgPKBxh4IUoOYXbROrpuDa9/q9/VPb6UNEP4uII9RKwclTZWUyl1A0tSh9+lEhdz9F/EkskH3A6w==}
+    dev: false
 
   /oauth4webapi@2.10.4:
     resolution: {integrity: sha512-DSoj8QoChzOCQlJkRmYxAJCIpnXFW32R0Uq7avyghIeB6iJq0XAblOD7pcq3mx4WEBDwMuKr0Y1qveCBleG2Xw==}
