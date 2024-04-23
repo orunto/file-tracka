@@ -7,10 +7,13 @@ import content from '@/lib/dropdown-content.json'
 import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
 let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
+import { useState } from 'react';
 
 
 export default function DirectorBudget() {
     const { user, error, isLoading } = useUser();
+    const [view, setView] = useState(false)
+
 
     if (user) {
         if (user.sub != process.env.AUTH0_COM_ID) {
@@ -36,9 +39,7 @@ export default function DirectorBudget() {
                         </section>
 
                         <section className='flex flex-col items-end w-full box-border gap-8'>
-                            <Button onclick="">Assign a New File</Button>
-
-                            <Table headers={header} actions={content.Actions['Honorable Commissioner\'s Office']} />
+                            <Table view={() => setView(false)} headers={header} actions={content.Actions['Honorable Commissioner\'s Office']} />
                         </section>
                     </main>
                 </>

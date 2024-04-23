@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react';
 
 export default function Registry() {
     const { user, error, isLoading } = useUser();
+    const [view, setView] = useState(false)
+
 
     const [assign, setAssign] = useState(false)
 
@@ -48,7 +50,7 @@ export default function Registry() {
                                 <Image src={sendIcon} alt='' />
                             </Button>
 
-                            <Table headers={header} actions={content.Actions.Registry} />
+                            <Table view={() => setView(false)}  headers={header} actions={content.Actions.Registry} />
                         </section>
                     </main>
 

@@ -7,10 +7,12 @@ import content from '@/lib/dropdown-content.json'
 import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
 let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
-
+import { useState } from 'react';
 
 export default function PermanentSecretary() {
     const { user, error, isLoading } = useUser();
+    const [view, setView] = useState(false)
+
 
     if (user) {
         if (user.sub != process.env.AUTH0_PS_ID) {
@@ -38,7 +40,7 @@ export default function PermanentSecretary() {
                         <section className='flex flex-col items-end w-full box-border gap-8'>
                             <Button onclick="">Assign a New File</Button>
 
-                            <Table headers={header} actions={content.Actions['Director Budgets']} />
+                            <Table view={() => setView(false)}  headers={header} actions={content.Actions['Director Budgets']} />
 
                         </section>
                     </main>
