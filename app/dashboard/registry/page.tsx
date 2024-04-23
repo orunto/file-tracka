@@ -10,39 +10,51 @@ let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Recei
 import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
 import Image from 'next/image';
 import AssignModal from '@/components/molecules/AssignModal';
+import { useEffect } from 'react';
 
 export default function Registry() {
     const { user, error, isLoading } = useUser();
 
-    return (
-        user && (
-            <>
-                <Header user_role={`Beta Tester`} username={user.name} page={`Registry`} />
+    // useEffect(() => {
+    // }, [user])
 
-                <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
-                    <section className='box-border flex flex-col gap-4 w-full'>
-                        <header className='text-xl font-semibold'>Filters</header>
+    if (user) {
+        if (user.sub != process.env.AUTH0_REG_ID) {
+            window.location.assign('/')
+        }
 
-                        <div className='flex gap-4'>
-                            <Dropdown name={`MDAS`} content={content.MDAS} />
-                            <Dropdown name={`Groups`} content={content.Groups} />
-                            <Dropdown name={`Action Taken`} content={content.Actions.Registry} />
-                            <SearchBar />
-                        </div>
-                    </section>
+        else {
+            return (
+                <>
+                    <Header user_role={`Beta Tester`} username={user.name} page={`Registry`} />
 
-                    <section className='flex flex-col items-end w-full box-border gap-8'>
-                        <Button onclick="">
-                            Assign a New File
-                            <Image src={sendIcon} alt='' />
-                        </Button>
+                    <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
+                        <section className='box-border flex flex-col gap-4 w-full'>
+                            <header className='text-xl font-semibold'>Filters</header>
 
-                        <Table headers={header} actions={content.Actions.Registry} />
-                    </section>
-                </main>
+                            <div className='flex gap-4'>
+                                <Dropdown name={`MDAS`} content={content.MDAS} />
+                                <Dropdown name={`Groups`} content={content.Groups} />
+                                <Dropdown name={`Action Taken`} content={content.Actions.Registry} />
+                                <SearchBar />
+                            </div>
+                        </section>
 
-                {/* <AssignModal/> */}
-            </>
-        )
-    )
+                        <section className='flex flex-col items-end w-full box-border gap-8'>
+                            <Button onclick="">
+                                Assign a New File
+                                <Image src={sendIcon} alt='' />
+                            </Button>
+
+                            <Table headers={header} actions={content.Actions.Registry} />
+                        </section>
+                    </main>
+
+                    {/* <AssignModal/> */}
+                </>
+            )
+
+        }
+
+    }
 }

@@ -9,11 +9,11 @@ import Table from '@/components/compounds/Table';
 let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
 
 
-export default function PermanentSecretary() {
+export default function DirectorBudget() {
     const { user, error, isLoading } = useUser();
 
     if (user) {
-        if (user.sub != process.env.AUTH_PS_ID) {
+        if (user.sub != process.env.AUTH0_COM_ID) {
             window.location.assign('/')
         }
 
@@ -21,7 +21,7 @@ export default function PermanentSecretary() {
 
             return (
                 <>
-                    <Header user_role={`Beta Tester`} username={user.name} page={`Permanent Secretary`} />
+                    <Header user_role={`Beta Tester`} username={user.name} page={`Honorable Commissioner`} />
 
                     <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
                         <section className='box-border flex flex-col gap-4 w-full'>
@@ -30,7 +30,7 @@ export default function PermanentSecretary() {
                             <div className='flex gap-4'>
                                 <Dropdown name={`MDAS`} content={content.MDAS} />
                                 <Dropdown name={`Groups`} content={content.Groups} />
-                                <Dropdown name={`Action Taken`} content={content.Actions['Permanent Secretary']} />
+                                <Dropdown name={`Action Taken`} content={content.Actions['Honorable Commissioner\'s Office']} />
                                 <SearchBar />
                             </div>
                         </section>
@@ -38,12 +38,12 @@ export default function PermanentSecretary() {
                         <section className='flex flex-col items-end w-full box-border gap-8'>
                             <Button onclick="">Assign a New File</Button>
 
-                            <Table headers={header} actions={content.Actions['Director Budgets']} />
-
+                            <Table headers={header} actions={content.Actions['Honorable Commissioner\'s Office']} />
                         </section>
                     </main>
                 </>
             )
         }
     }
+
 }

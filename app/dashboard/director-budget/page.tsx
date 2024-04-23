@@ -12,30 +12,38 @@ let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Recei
 export default function DirectorBudget() {
     const { user, error, isLoading } = useUser();
 
-    return (
-        user && (
-            <>
-                <Header user_role={`Beta Tester`} username={user.name} page={`Director of Budgets`} />
+    if (user) {
+        if (user.sub != process.env.AUTH0_DIRECTOR_ID) {
+            window.location.assign('/')
+        }
 
-                <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
-                    <section className='box-border flex flex-col gap-4 w-full'>
-                        <header className='text-xl font-semibold'>Filters</header>
+        else {
 
-                        <div className='flex gap-4'>
-                            <Dropdown name={`MDAS`} content={content.MDAS} />
-                            <Dropdown name={`Groups`} content={content.Groups} />
-                            <Dropdown name={`Action Taken`} content={content.Actions['Director Budgets']} />
-                            <SearchBar />
-                        </div>
-                    </section>
+            return (
+                <>
+                    <Header user_role={`Beta Tester`} username={user.name} page={`Director of Budgets`} />
 
-                    <section className='flex flex-col items-end w-full box-border gap-8'>
-                        <Button onclick="">Assign a New File</Button>
+                    <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
+                        <section className='box-border flex flex-col gap-4 w-full'>
+                            <header className='text-xl font-semibold'>Filters</header>
 
-                        <Table headers={header} actions={content.Actions['Director Budgets']}/>
-                    </section>
-                </main>
-            </>
-        )
-    )
+                            <div className='flex gap-4'>
+                                <Dropdown name={`MDAS`} content={content.MDAS} />
+                                <Dropdown name={`Groups`} content={content.Groups} />
+                                <Dropdown name={`Action Taken`} content={content.Actions['Director Budgets']} />
+                                <SearchBar />
+                            </div>
+                        </section>
+
+                        <section className='flex flex-col items-end w-full box-border gap-8'>
+                            <Button onclick="">Assign a New File</Button>
+
+                            <Table headers={header} actions={content.Actions['Director Budgets']} />
+                        </section>
+                    </main>
+                </>
+            )
+        }
+    }
+
 }
