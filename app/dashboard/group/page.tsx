@@ -6,6 +6,8 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import content from '@/lib/dropdown-content.json'
 import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
+let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
+
 
 export default function Groups() {
     const { user, error, isLoading } = useUser();
@@ -22,15 +24,14 @@ export default function Groups() {
                         <div className='flex gap-4'>
                             <Dropdown name={`MDAS`} content={content.MDAS} />
                             <Dropdown name={`Groups`} content={content.Groups} />
-                            <Dropdown name={`Action Taken`} content={content.Actions['Permanent Secretary']} />
+                            <Dropdown name={`Action Taken`} content={content.Actions.Groups} />
                             <SearchBar />
                         </div>
                     </section>
 
                     <section className='flex flex-col items-end w-full box-border gap-8'>
-                        <Button onclick="">Assign a New File</Button>
+                        <Table headers={header} actions={content.Actions.Groups}/>
 
-                        <Table />
                     </section>
                 </main>
             </>

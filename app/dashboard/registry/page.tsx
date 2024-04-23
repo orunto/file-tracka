@@ -6,7 +6,10 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import content from '@/lib/dropdown-content.json'
 import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
-
+let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
+import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
+import Image from 'next/image';
+import AssignModal from '@/components/molecules/AssignModal';
 
 export default function Registry() {
     const { user, error, isLoading } = useUser();
@@ -29,11 +32,16 @@ export default function Registry() {
                     </section>
 
                     <section className='flex flex-col items-end w-full box-border gap-8'>
-                        <Button onclick="">Assign a New File</Button>
+                        <Button onclick="">
+                            Assign a New File
+                            <Image src={sendIcon} alt='' />
+                        </Button>
 
-                        <Table />
+                        <Table headers={header} actions={content.Actions.Registry} />
                     </section>
                 </main>
+
+                {/* <AssignModal/> */}
             </>
         )
     )

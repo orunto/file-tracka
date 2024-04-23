@@ -6,6 +6,8 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import content from '@/lib/dropdown-content.json'
 import Header from '@/components/molecules/Header';
 import Table from '@/components/compounds/Table';
+let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
+
 
 export default function PermanentSecretary() {
     const { user, error, isLoading } = useUser();
@@ -30,7 +32,8 @@ export default function PermanentSecretary() {
                     <section className='flex flex-col items-end w-full box-border gap-8'>
                         <Button onclick="">Assign a New File</Button>
 
-                        <Table />
+                        <Table headers={header} actions={content.Actions['Director Budgets']}/>
+
                     </section>
                 </main>
             </>

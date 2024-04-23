@@ -38,7 +38,7 @@ button, input {
 } */
 
 select {
-  width: min-content;
+  width: max-content;
   font-family: inherit!important;
   max-width: 240px;
 }

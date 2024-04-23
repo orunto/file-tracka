@@ -1,6 +1,8 @@
 'use client'
 import toogleIcon from '@/public/icons/toggle.svg'
 import Image from 'next/image'
+import helpIcon from '@/public/icons/material-symbols_help.svg'
+import supportIcon from '@/public/icons/streamline_customer-support-1-solid.svg'
 
 export default function TableConsole() {
     return (
@@ -14,8 +16,14 @@ export default function TableConsole() {
             </div>
 
             <div className="flex items-center justify-self-end gap-8 text-green-500 font-medium">
-                <a href="/help">Help</a>
-                <a href="/support">Support</a>
+                <a href="/help" className='flex items-center gap-2'>
+                    <Image src={helpIcon} alt='' />
+                    Help
+                </a>
+                <a href="/support" className='flex items-center gap-2'>
+                    <Image src={supportIcon} alt='' />
+                    Support
+                </a>
             </div>
         </div>
     )
