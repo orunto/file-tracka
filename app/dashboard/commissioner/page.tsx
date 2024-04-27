@@ -128,7 +128,7 @@ export default function Commissioner() {
         else {
             return (
                 <>
-                    <Header user_role={`Beta Tester`} username={user.name} page={`Registry`} />
+                    <Header user_role={`Beta Tester`} username={user.name} page={`Office of the Honorable Commissioner`} />
 
                     <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
                         <section className='box-border flex flex-col gap-4 w-full'>

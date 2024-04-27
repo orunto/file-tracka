@@ -22,6 +22,7 @@ export default function Registry() {
     const [view, setView] = useState(false)
     const [MDAS, setMDAS] = useState<any[]>([])
     const [rows, setRows] = useState<any[]>([])
+    const [api, setApi] = useState('/api/get/assigned')
 
 
     const [mda, setMdapick] = useState('')
@@ -37,7 +38,7 @@ export default function Registry() {
     const [line, setLine] = useState("0%")
 
     function Assigned() {
-        fetch('/api/get/assigned')
+        fetch(api)
             .then((response) => response.json())
             .then((result) => {
 
@@ -93,7 +94,7 @@ export default function Registry() {
 
         Assigned()
 
-    }, [table])
+    }, [api])
 
     function Assign(e: any) {
         e.preventDefault()
@@ -153,10 +154,10 @@ export default function Registry() {
                                 <Image src={sendIcon} alt='' />
                             </Button>
 
-                            <TablesToggle clickeventone={() => {setLine("0%"); setButtonColor("button_one")}} 
-                                clickeventtwo={() => {setLine("100%"); setButtonColor("button_two")}} 
-                                clickeventthree={() => {setLine("200%"); setButtonColor("button_three")}} 
-                                clickeventfour={() => {setLine("300%"); setButtonColor("button_four")}}
+                            <TablesToggle clickeventone={() => {setLine("0%"); setButtonColor("button_one"); setRows([]); setApi('/api/get/assigned')}} 
+                                clickeventtwo={() => {setLine("100%"); setButtonColor("button_two"); setRows([]); setApi('/api/get/completed')}} 
+                                clickeventthree={() => {setLine("200%"); setButtonColor("button_three"); setRows([]);  setApi('/api/get/returned')}} 
+                                clickeventfour={() => {setLine("300%"); setButtonColor("button_four"); setRows([]); setApi('/api/get/out')}}
                                 buttoncolor={buttonColor} line={line}
                                 buttonone={`Assigned`} buttontwo={`Completed`} buttonthree={`Returned`} buttonfour={`Back to MDA`}
                             />

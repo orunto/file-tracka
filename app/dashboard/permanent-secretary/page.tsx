@@ -128,7 +128,7 @@ export default function PermanentSecretary() {
         else {
             return (
                 <>
-                    <Header user_role={`Beta Tester`} username={user.name} page={`Registry`} />
+                    <Header user_role={`Beta Tester`} username={user.name} page={`Permanent Secretary   `} />
 
                     <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
                         <section className='box-border flex flex-col gap-4 w-full'>

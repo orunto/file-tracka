@@ -14,6 +14,7 @@ import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
 import Image from 'next/image';
 import AssignModal from '@/components/molecules/AssignModal';
 import { useEffect, useState } from 'react';
+import TablesToggle from '@/components/molecules/TablesToggle';
 
 
 export default function Groups() {
@@ -21,6 +22,7 @@ export default function Groups() {
     const [view, setView] = useState(false)
     const [MDAS, setMDAS] = useState<any[]>([])
     const [rows, setRows] = useState<any[]>([])
+    const [api, setApi] = useState('/api/get/assigned')
 
 
     const [mda, setMdapick] = useState('')
@@ -32,27 +34,30 @@ export default function Groups() {
 
     const [assign, setAssign] = useState(false)
 
+    const [buttonColor, setButtonColor] = useState("button_one")
+    const [line, setLine] = useState("0%")
+
     function Assigned() {
-        fetch('/api/get/assigned')
+        fetch(api)
             .then((response) => response.json())
             .then((result) => {
 
                 setRows(result.result.rows);
                 console.log(Object.values(result.result.rows))
                 if (Object.values(result.result.rows).length > 7) {
-                    if ((Object.values(result.result.rows).length/7) % 1 != 0) {
-                        setPageNo(Math.round(Object.values(result.result.rows).length/7) + 1)
+                    if ((Object.values(result.result.rows).length / 7) % 1 != 0) {
+                        setPageNo(Math.round(Object.values(result.result.rows).length / 7) + 1)
                         console.log('h');
 
                     }
-                    setPageNo(Math.round(Object.values(result.result.rows).length/7) + 1)
+                    setPageNo(Math.round(Object.values(result.result.rows).length / 7) + 1)
                     console.log('h');
-                    
+
                 } else if (Object.values(result.result.rows).length < 7) {
                     setPageNo(1)
                 }
                 else {
-                    setPageNo(Object.values(result.result.rows).length/7)
+                    setPageNo(Object.values(result.result.rows).length / 7)
                     console.log('t')
                     console.log(Object.values(result.result.rows).length)
                 }
@@ -63,18 +68,18 @@ export default function Groups() {
 
     const [pageNo, setPageNo] = useState(0)
 
-    function GetPageNo () {
+    function GetPageNo() {
         setTimeout(() => {
-            if ((rows.length/7) % 1 != 0) {
-                setPageNo(Math.round(rows.length/7) + 1)
+            if ((rows.length / 7) % 1 != 0) {
+                setPageNo(Math.round(rows.length / 7) + 1)
                 console.log('h');
-                
+
             } else {
-                setPageNo(rows.length/7)
+                setPageNo(rows.length / 7)
                 console.log('t')
                 console.log(rows.length)
             }
-            
+
         }, 500);
     }
 
@@ -89,7 +94,7 @@ export default function Groups() {
 
         Assigned()
 
-    }, [table])
+    }, [api])
 
     function Assign(e: any) {
         e.preventDefault()
@@ -121,10 +126,10 @@ export default function Groups() {
     }
 
     if (user) {
-        if (user.sub == process.env.AUTH0_GROUPA_ID || process.env.AUTH0_GROUPB_ID || process.env.AUTH0_GROUPC_ID || process.env.AUTH0_GROUPD_ID)  {
+        if (user.sub == process.env.AUTH0_GROUPA_ID || process.env.AUTH0_GROUPB_ID || process.env.AUTH0_GROUPC_ID || process.env.AUTH0_GROUPD_ID) {
             return (
                 <>
-                    <Header user_role={`Beta Tester`} username={user.name} page={`Registry`} />
+                    <Header user_role={`Beta Tester`} username={user.name} page={`Group ${window.location.hash.substring(1)}`} />
 
                     <main className='box-border flex flex-col gap-16 mt-16 px-12 w-full'>
                         <section className='box-border flex flex-col gap-4 w-full'>
@@ -139,10 +144,13 @@ export default function Groups() {
                         </section>
 
                         <section className='flex flex-col items-end w-full box-border gap-8'>
-                            <Button onclick={() => setAssign(true)}>
-                                Assign a New File
-                                <Image src={sendIcon} alt='' />
-                            </Button>
+                            <TablesToggle clickeventone={() => { setLine("0%"); setButtonColor("button_one"); setRows([]); setApi('/api/get/assigned') }}
+                                clickeventtwo={() => { setLine("100%"); setButtonColor("button_two"); setRows([]); setApi('/api/get/groupreceived/' + window.location.hash.substring(1)) }}
+                                clickeventthree={() => { setLine("200%"); setButtonColor("button_three"); setRows([]); setApi(`/api/get/appraised/${window.location.hash.substring(1)}`) }}
+                                clickeventfour={() => { setLine("300%"); setButtonColor("button_four"); setRows([]); setApi('/api/get/returned') }}
+                                buttoncolor={buttonColor} line={line}
+                                buttonone={`Reception`} buttontwo={`Queue`} buttonthree={`Appraised`} buttonfour={`Returned`}
+                            />
 
                             <Table pageno={pageNo} content={rows} headers={header} actions={content.Actions.Registry} />
                         </section>
@@ -150,12 +158,12 @@ export default function Groups() {
 
                     {
                         assign && (
-                            <AssignModal mdas={MDAS} cancel={() => {setAssign(false); setTable([])}} />
+                            <AssignModal mdas={MDAS} cancel={() => { setAssign(false); setTable([]) }} />
 
                         )
                     }
 
-                    
+
                 </>
             )
         }
