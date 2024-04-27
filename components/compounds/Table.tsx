@@ -10,8 +10,7 @@ interface props {
     actions: any[],
     headers: any[],
     view: any,
-    content: any[],
-    material: any[]
+    content: {}[],
 }
 export default function Table(props: props) {
     return (
@@ -25,10 +24,10 @@ export default function Table(props: props) {
 
                 {props.content.map((clone, i) => (
                     <tr key={i} className="flex rounded-lg border border-gray-200">
-                        {props.content.map((clone, i) => (
-                            <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium" key={i}><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone}</span></td>
+                        {Object.values(clone).map((incepticlone, i) => (
+                            <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium" key={i}><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{incepticlone as []}</span></td>
                         ))}
-                        <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium">
+                        {/* <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium">
                             <select name="actions" className="flex whitespace-nowrap overflow-hidden p-0 justify-start border-0 w-full text-black text-base font-medium overflow-ellipsis">
                                 <option className="text-base font-medium" value="None" disabled selected>None</option>
                                 {
@@ -37,33 +36,7 @@ export default function Table(props: props) {
                                     ))
                                 }
                             </select>
-                        </td>
-
-
-
-                        <td className="flex items-center gap-2 cursor-pointer whitespace-nowrap overflow-hidden p-4 justify-start w-full text-green-500 text-base font-medium" onClick={props.view}>
-                            View
-                            <Image src={eyeIcon} alt="" />
-                        </td>
-                    </tr>
-                ))}
-
-
-                {props.material.map((clone, i) => (
-                    <tr key={i} className="flex rounded-lg border border-gray-200">
-                        {props.material.map((clone, i) => (
-                            <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium" key={i}><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone}</span></td>
-                        ))}
-                        <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium">
-                            <select name="actions" className="flex whitespace-nowrap overflow-hidden p-0 justify-start border-0 w-full text-black text-base font-medium overflow-ellipsis">
-                                <option className="text-base font-medium" value="None" disabled selected>None</option>
-                                {
-                                    props.actions.map((clone, i) => (
-                                        <option value={clone} key={i}>{clone}</option>
-                                    ))
-                                }
-                            </select>
-                        </td>
+                        </td> */}
 
 
 

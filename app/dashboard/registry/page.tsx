@@ -18,14 +18,38 @@ import { useEffect, useState } from 'react';
 export default function Registry() {
     const { user, error, isLoading } = useUser();
     const [view, setView] = useState(false)
+    const [MDAS, setMDAS] = useState<any[]>([])
+    const [rows, setRows] = useState<any[]>([])
+
 
     const [table, setTable] = useState([])
 
 
     const [assign, setAssign] = useState(false)
 
-    // useEffect(() => {
-    // }, [user])
+    function Assigned() {
+        fetch('/api/get/assigned')
+            .then((response) => response.json())
+            .then((result) => {
+
+                setRows(result.result.rows);
+                console.log(Object.values(result.result.rows[0]))
+
+            })
+            .catch((error) => console.error(error));
+    }
+
+    
+    
+
+    useEffect(() => {
+        const MDASArray = [...content.MDAS.A, ...content.MDAS.B, ...content.MDAS.C, ...content.MDAS.D]
+
+        setMDAS(MDASArray)
+
+
+        Assigned()
+    }, [table])
 
     if (user) {
         if (user.sub != process.env.AUTH0_REG_ID) {
@@ -42,7 +66,7 @@ export default function Registry() {
                             <header className='text-xl font-semibold'>Filters</header>
 
                             <div className='flex gap-4'>
-                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS} />
+                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={MDAS} />
                                 <Dropdown placeholder={`Groups`} name={`Groups`} content={content.Groups} />
                                 <Dropdown placeholder={`Action Taken`} name={`Action Taken`} content={content.Actions.Registry} />
                                 <SearchBar />
@@ -55,25 +79,20 @@ export default function Registry() {
                                 <Image src={sendIcon} alt='' />
                             </Button>
 
-                            <Table material={table} content={row} view={() => setView(true)} headers={header} actions={content.Actions.Registry} />
+                            <Table content={rows} view={() => setView(true)} headers={header} actions={content.Actions.Registry} />
                         </section>
                     </main>
 
                     {
                         assign && (
-                            <AssignModal cancel={() => setAssign(false)} assign={() => {
-                                
-                                setAssign(false)
-                                let a = document.getElementById()
-                                setTable([])
-                            }} />
+                            <AssignModal mdas={MDAS} cancel={() => setAssign(false)} assign={``} />
 
                         )
                     }
 
                     {
                         view && (
-                            <DetailsModal  days={row[5]} date={row[5]} amount={row[4]} number={row[3]} title={row[2]} mda={row[0]} content={content.Actions.Groups} cancel={() => setView(false)} />
+                            <DetailsModal days={row[5]} date={row[5]} amount={row[4]} number={row[3]} title={row[2]} mda={row[0]} content={content.Actions.Groups} cancel={() => setView(false)} />
                         )
                     }
                 </>

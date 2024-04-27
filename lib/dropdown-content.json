@@ -219,7 +219,8 @@
         "Registry": [
             "Assigned",
             "Returned",
-            "Sent for Completion"
+            "Completed",
+            "Back to MDA"
         ],
         "Groups": [
             "Appraised",
