@@ -33,7 +33,7 @@ export default function DirectorBudget() {
                             <header className='text-xl font-semibold'>Filters</header>
 
                             <div className='flex gap-4'>
-                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS} />
+                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS.A} />
                                 <Dropdown placeholder={`Days`} name={`Days`} content={content.Groups} />
                                 <Dropdown placeholder={`Action Taken`} name={`Action Taken`} content={content.Actions['Honorable Commissioner\'s Office']} />
                                 <SearchBar />

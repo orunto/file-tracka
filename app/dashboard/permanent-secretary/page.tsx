@@ -30,7 +30,7 @@ export default function PermanentSecretary() {
                             <header className='text-xl font-semibold'>Filters</header>
 
                             <div className='flex gap-4'>
-                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS} />
+                                <Dropdown placeholder={`MDAS`} name={`MDAS`} content={content.MDAS.A} />
                                 <Dropdown placeholder={`Groups`} name={`Groups`} content={content.Groups} />
                                 <Dropdown placeholder={`Action Taken`} name={`Action Taken`} content={content.Actions['Permanent Secretary']} />
                                 <SearchBar />
@@ -40,7 +40,7 @@ export default function PermanentSecretary() {
                         <section className='flex flex-col items-end w-full box-border gap-8'>
                             <Button onclick="">Assign a New File</Button>
 
-                            <Table view={() => setView(false)}  headers={header} actions={content.Actions['Director Budgets']} />
+                            <Table view={() => setView(false)} headers={header} actions={content.Actions['Director Budgets']} content={[]} />
 
                         </section>
                     </main>
