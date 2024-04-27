@@ -55,6 +55,7 @@ tr {
   border: 0.5px solid rgb(187, 187, 187);
 }
 
+
 @media (max-width: 500px) {
   body {
     overflow-y: scroll;

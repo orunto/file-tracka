@@ -14,6 +14,8 @@ import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
 import Image from 'next/image';
 import AssignModal from '@/components/molecules/AssignModal';
 import { useEffect, useState } from 'react';
+import TablesToggle from "@/components/molecules/TablesToggle"
+
 
 export default function Registry() {
     const { user, error, isLoading } = useUser();
@@ -31,6 +33,9 @@ export default function Registry() {
 
     const [assign, setAssign] = useState(false)
 
+    const [buttonColor, setButtonColor] = useState("button_one")
+    const [line, setLine] = useState("0%")
+
     function Assigned() {
         fetch('/api/get/assigned')
             .then((response) => response.json())
@@ -39,19 +44,19 @@ export default function Registry() {
                 setRows(result.result.rows);
                 console.log(Object.values(result.result.rows))
                 if (Object.values(result.result.rows).length > 7) {
-                    if ((Object.values(result.result.rows).length/7) % 1 != 0) {
-                        setPageNo(Math.round(Object.values(result.result.rows).length/7) + 1)
+                    if ((Object.values(result.result.rows).length / 7) % 1 != 0) {
+                        setPageNo(Math.round(Object.values(result.result.rows).length / 7) + 1)
                         console.log('h');
 
                     }
-                    setPageNo(Math.round(Object.values(result.result.rows).length/7) + 1)
+                    setPageNo(Math.round(Object.values(result.result.rows).length / 7) + 1)
                     console.log('h');
-                    
+
                 } else if (Object.values(result.result.rows).length < 7) {
                     setPageNo(1)
                 }
                 else {
-                    setPageNo(Object.values(result.result.rows).length/7)
+                    setPageNo(Object.values(result.result.rows).length / 7)
                     console.log('t')
                     console.log(Object.values(result.result.rows).length)
                 }
@@ -62,18 +67,18 @@ export default function Registry() {
 
     const [pageNo, setPageNo] = useState(0)
 
-    function GetPageNo () {
+    function GetPageNo() {
         setTimeout(() => {
-            if ((rows.length/7) % 1 != 0) {
-                setPageNo(Math.round(rows.length/7) + 1)
+            if ((rows.length / 7) % 1 != 0) {
+                setPageNo(Math.round(rows.length / 7) + 1)
                 console.log('h');
-                
+
             } else {
-                setPageNo(rows.length/7)
+                setPageNo(rows.length / 7)
                 console.log('t')
                 console.log(rows.length)
             }
-            
+
         }, 500);
     }
 
@@ -148,18 +153,27 @@ export default function Registry() {
                                 <Image src={sendIcon} alt='' />
                             </Button>
 
+                            <TablesToggle clickeventone={() => {setLine("0%"); setButtonColor("button_one")}} 
+                                clickeventtwo={() => {setLine("100%"); setButtonColor("button_two")}} 
+                                clickeventthree={() => {setLine("200%"); setButtonColor("button_three")}} 
+                                clickeventfour={() => {setLine("300%"); setButtonColor("button_four")}}
+                                buttoncolor={buttonColor} line={line}
+                                buttonone={`Assigned`} buttontwo={`Completed`} buttonthree={`Returned`} buttonfour={`Back to MDA`}
+                            />
+
+
                             <Table pageno={pageNo} content={rows} headers={header} actions={content.Actions.Registry} />
                         </section>
                     </main>
 
                     {
                         assign && (
-                            <AssignModal mdas={MDAS} cancel={() => {setAssign(false); setTable([])}} />
+                            <AssignModal mdas={MDAS} cancel={() => { setAssign(false); setTable([]) }} />
 
                         )
                     }
 
-                    
+
                 </>
             )
 

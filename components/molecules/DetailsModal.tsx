@@ -3,6 +3,7 @@ import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
 import Image from 'next/image';
 import Dropdown from '../atoms/Dropdown'
 import Button from '../atoms/Button'
+import styles from './layout.module.scss'
 
 interface props {
     cancel: any,
@@ -15,7 +16,7 @@ interface props {
 
 export default function DetailsModal(props: props) {
     return (
-        <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+        <div id={styles["details"]} className="fixed top-0 left-0 w-full h-screen flex items-center justify-center" >
             <form className="flex flex-col gap-8 px-12 py-20 bg-white rounded-2xl max-h-96 overflow-y-scroll" action="" style={{ width: 'max-content' }}>
                 <h1 className='font-bold'>FILE DETAILS</h1>
 
