@@ -5,6 +5,7 @@ import eyeIcon from '@/public/icons/mdi_eye.svg'
 import Image from "next/image"
 import DetailsModal from "../molecules/DetailsModal"
 import { useState } from "react"
+import TablesToggle from "../molecules/TablesToggle"
 
 interface props {
     actions: any[],
@@ -33,6 +34,7 @@ export default function Table(props: props) {
 
     return (
         <div className="flex flex-col justify-between w-full pb-10" style={{ zIndex: '2'}}>
+            <TablesToggle/>
             <table className="w-full flex flex-col gap-4 h-screen">
                 <th className="flex">
                     {props.headers.map((clone, i) => (

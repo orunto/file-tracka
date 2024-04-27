@@ -5,7 +5,7 @@ import styles from '@/components/molecules/layout.module.scss'
 export default function TablesToggle () {
     return (
         <div className={styles.TablesToggle}>
-            <div>
+            <div className="flex">
                 <Button onclick="">Assigned</Button>
 
                 <Button onclick="">Completed</Button>
@@ -13,6 +13,8 @@ export default function TablesToggle () {
                 <Button onclick="">Returned</Button>
 
             </div>
+
+            <hr />
         </div>
     )
 }
