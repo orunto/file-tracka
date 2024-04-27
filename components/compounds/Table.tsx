@@ -3,18 +3,36 @@
 import TableConsole from "../molecules/TableConsole"
 import eyeIcon from '@/public/icons/mdi_eye.svg'
 import Image from "next/image"
-let header = [`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
-let row = [`Bureau of Information Technology`, `A`, `General Expenditures and`, `0000001`, `20,000,000.00`, `18/04/2024`,]
+import DetailsModal from "../molecules/DetailsModal"
+import { useState } from "react"
 
 interface props {
     actions: any[],
     headers: any[],
-    view: any,
-    content: {}[],
+    content: {
+        dateassigned: any,
+        fileamount: any,
+        filenumber: any,
+        filetitle: any,
+        mda: any,
+        groupassigned: any,
+    }[],
+    pageno: any
 }
 export default function Table(props: props) {
+    const [view, setView] = useState(false)
+    const [mykey, setMykey] = useState(0) 
+
+    function closeModal() {
+        setView(false)
+    }
+
+    function openModal (){
+        setView(true)
+    }
+
     return (
-        <div className="flex flex-col justify-between w-full pb-10">
+        <div className="flex flex-col justify-between w-full pb-10" style={{ zIndex: '2'}}>
             <table className="w-full flex flex-col gap-4 h-screen">
                 <th className="flex">
                     {props.headers.map((clone, i) => (
@@ -27,7 +45,34 @@ export default function Table(props: props) {
                         {Object.values(clone).map((incepticlone, i) => (
                             <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium" key={i}><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{incepticlone as []}</span></td>
                         ))}
-                        {/* <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium">
+
+                        <td className="flex items-center gap-2 cursor-pointer whitespace-nowrap overflow-hidden p-4 justify-start w-full text-green-500 text-base font-medium" onClick={() => { 
+                            setMykey(i)
+                            setTimeout(() => {
+                                setView(true)
+                            }, 300);
+                        }}>
+                            View
+                            <Image src={eyeIcon} alt="" />
+                        </td>
+
+                        {
+                            view && (
+                                <DetailsModal key={i} date={props.content[mykey].dateassigned} amount={props.content[mykey].fileamount} number={props.content[mykey].filenumber} title={props.content[mykey].filetitle} mda={props.content[mykey].mda} cancel={closeModal} />
+                            )
+                        }
+
+                    </tr>
+                ))}
+            </table>
+
+
+            <TableConsole no={props.pageno} />
+        </div>
+    )
+}
+
+{/* <td className="flex whitespace-nowrap overflow-hidden p-4 justify-start w-full text-black text-base font-medium">
                             <select name="actions" className="flex whitespace-nowrap overflow-hidden p-0 justify-start border-0 w-full text-black text-base font-medium overflow-ellipsis">
                                 <option className="text-base font-medium" value="None" disabled selected>None</option>
                                 {
@@ -37,19 +82,3 @@ export default function Table(props: props) {
                                 }
                             </select>
                         </td> */}
-
-
-
-                        <td className="flex items-center gap-2 cursor-pointer whitespace-nowrap overflow-hidden p-4 justify-start w-full text-green-500 text-base font-medium" onClick={props.view}>
-                            View
-                            <Image src={eyeIcon} alt="" />
-                        </td>
-                    </tr>
-                ))}
-            </table>
-
-
-            <TableConsole />
-        </div>
-    )
-}

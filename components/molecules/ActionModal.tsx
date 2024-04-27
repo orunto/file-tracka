@@ -6,7 +6,9 @@ import Button from '../atoms/Button'
 
 interface props {
     cancel: any,
+    content: any[],
     date: any,
+    days: any,
     title: any,
     number: any,
     amount: any,
@@ -17,7 +19,18 @@ export default function DetailsModal(props: props) {
     return (
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
             <form className="flex flex-col gap-8 px-12 py-20 bg-white rounded-2xl max-h-96 overflow-y-scroll" action="" style={{ width: 'max-content' }}>
-                <h1 className='font-bold'>FILE DETAILS</h1>
+                <h1 className='font-bold'>NEW FILE DETAILS</h1>
+                <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
+                    <label className='font-semibold' htmlFor="Actions">Action Taken</label>
+                    <select className="box-border flex gap-2 rounded-lg w-full bg-transparent border-2 border-gray-100 text-base font-medium px-4 py-4" style={{ maxWidth: '100%' }} name={`MDA`} id={`MDA`}>
+                        <option className="text-base font-semibold" value="Actions" disabled selected>None</option>
+                        {
+                            props.content.map((clone, i) => (
+                                <option value={clone} key={i}>{clone}</option>
+                            ))
+                        }
+                    </select>
+                </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="mda">MDA</label>
@@ -27,6 +40,11 @@ export default function DetailsModal(props: props) {
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="date">Date Received</label>
                     <input type="text" name="date" id="date" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.date} />
+                </fieldset>
+
+                <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
+                    <label htmlFor="days">Days Spent</label>
+                    <input type="text" name="days" id="days" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.days} />
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>

@@ -1,11 +1,18 @@
 'use client'
+import Button from "../atoms/Button"
+import styles from '@/components/molecules/layout.module.scss'
 
 export default function TablesToggle () {
     return (
-        <div className="flex">
-            <button>For Appraisal</button>
+        <div className={styles.TablesToggle}>
+            <div>
+                <Button onclick="">Assigned</Button>
 
-            <button>For Completion</button>
+                <Button onclick="">Completed</Button>
+
+                <Button onclick="">Returned</Button>
+
+            </div>
         </div>
     )
 }

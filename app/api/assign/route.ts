@@ -1,4 +1,5 @@
 import { sql } from '@vercel/postgres';
+import { redirect } from "next/navigation";
 import { NextResponse } from 'next/server';
 
 interface props {
@@ -10,7 +11,7 @@ interface props {
   dateassigned: any,
   actiontaken: any
 }
-export async function GET(request: Request, props: props) {
+export async function POST(request: Request, props: props) {
   const { searchParams } = new URL(request.url);
   const mda = searchParams.get('mda');
   const assignedgroup = searchParams.get('assignedgroup');
@@ -23,9 +24,10 @@ export async function GET(request: Request, props: props) {
   try {
     const result =
       await sql`INSERT INTO Files ( MDA, AssignedGroup , FileTitle, FileNumber, FileAmount, DateAssigned, ActionTaken ) VALUES (${mda}, ${assignedgroup}, ${filetitle}, ${filenumber}, ${fileamount}, (to_timestamp(${dateassigned})), ${actiontaken});`;
-
-    return NextResponse.json({ result }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+      // redirect('/dashboard/registry')
+      return NextResponse.json({ result }, { status: 200 });
+    } catch (error) {
+      return NextResponse.json({ error }, { status: 500 });
+    }
   }
-}
+  

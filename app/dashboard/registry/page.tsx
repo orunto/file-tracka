@@ -22,6 +22,10 @@ export default function Registry() {
     const [rows, setRows] = useState<any[]>([])
 
 
+    const [mda, setMdapick] = useState('')
+    const [assignedgroup, setGrouppick] = useState('')
+
+
     const [table, setTable] = useState([])
 
 
@@ -33,14 +37,48 @@ export default function Registry() {
             .then((result) => {
 
                 setRows(result.result.rows);
-                console.log(Object.values(result.result.rows[0]))
+                console.log(Object.values(result.result.rows))
+                if (Object.values(result.result.rows).length > 7) {
+                    if ((Object.values(result.result.rows).length/7) % 1 != 0) {
+                        setPageNo(Math.round(Object.values(result.result.rows).length/7) + 1)
+                        console.log('h');
 
+                    }
+                    setPageNo(Math.round(Object.values(result.result.rows).length/7) + 1)
+                    console.log('h');
+                    
+                } else if (Object.values(result.result.rows).length < 7) {
+                    setPageNo(1)
+                }
+                else {
+                    setPageNo(Object.values(result.result.rows).length/7)
+                    console.log('t')
+                    console.log(Object.values(result.result.rows).length)
+                }
             })
             .catch((error) => console.error(error));
+
     }
 
-    
-    
+    const [pageNo, setPageNo] = useState(0)
+
+    function GetPageNo () {
+        setTimeout(() => {
+            if ((rows.length/7) % 1 != 0) {
+                setPageNo(Math.round(rows.length/7) + 1)
+                console.log('h');
+                
+            } else {
+                setPageNo(rows.length/7)
+                console.log('t')
+                console.log(rows.length)
+            }
+            
+        }, 500);
+    }
+
+
+
 
     useEffect(() => {
         const MDASArray = [...content.MDAS.A, ...content.MDAS.B, ...content.MDAS.C, ...content.MDAS.D]
@@ -49,7 +87,38 @@ export default function Registry() {
 
 
         Assigned()
+
     }, [table])
+
+    function Assign(e: any) {
+        e.preventDefault()
+        let title = document.getElementById("title") as HTMLSelectElement
+        let file_number = document.getElementById("file_number") as HTMLInputElement
+        let amount = document.getElementById("amount") as HTMLInputElement
+
+
+        var requestOptions: RequestInit = {
+            method: 'POST',
+            redirect: 'follow'
+        };
+
+        fetch(`/api/assign?mda=${mda}&assignedgroup=${assignedgroup}&filetitle=${title.value}&filenumber=${file_number.value}&fileamount=${amount.value}&dateassigned=${Date.now() / 1000}&actiontaken=Assigned`, {
+            method: 'POST',
+        })
+            .then((response) => response.json()).then((result) => {
+                console.log(result)
+                setAssign(false)
+            })
+            .catch((error) => console.error(error));
+    }
+
+
+    function setGroup() {
+        let mda = document.getElementById("MDA") as HTMLSelectElement
+
+        setMdapick(mda.value)
+    }
+
 
     if (user) {
         if (user.sub != process.env.AUTH0_REG_ID) {
@@ -79,22 +148,18 @@ export default function Registry() {
                                 <Image src={sendIcon} alt='' />
                             </Button>
 
-                            <Table content={rows} view={() => setView(true)} headers={header} actions={content.Actions.Registry} />
+                            <Table pageno={pageNo} content={rows} headers={header} actions={content.Actions.Registry} />
                         </section>
                     </main>
 
                     {
                         assign && (
-                            <AssignModal mdas={MDAS} cancel={() => setAssign(false)} assign={``} />
+                            <AssignModal mdas={MDAS} cancel={() => {setAssign(false); setTable([])}} />
 
                         )
                     }
 
-                    {
-                        view && (
-                            <DetailsModal days={row[5]} date={row[5]} amount={row[4]} number={row[3]} title={row[2]} mda={row[0]} content={content.Actions.Groups} cancel={() => setView(false)} />
-                        )
-                    }
+                    
                 </>
             )
 
