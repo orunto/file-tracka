@@ -1,0 +1,76 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model filerecords {
+  id                      String    @id @default(cuid())
+  mda                     String
+  assignedGroup           String
+  fileTitle               String
+  fileNumber              String
+  fileAmount              String
+  dateAssigned            DateTime
+  actionTaken             String
+  fileLocation            String?
+  dateAppraised           DateTime?
+  dateDBRecommended       DateTime?
+  datePSRecommended       DateTime?
+  dateApproved            DateTime?
+  dateRejected            DateTime?
+  dateReturnedtoGroup     DateTime?
+  dateReturnedtoRegistry  DateTime?
+  dateReturnedtoMDA       DateTime?
+  dateGroupReceived       DateTime?
+  groupDays               String?
+  dateDBReceived          DateTime?
+  dbDays                  DateTime?
+  datePSReceived          DateTime?
+  psDays                  DateTime?
+  dateCommissonerReceived DateTime?
+  commissionerDays        DateTime?
+  // user                      User? @relation(fields: [userId], references: [token])
+  userId                  String
+}
+
+// model User {
+// id            String       @default(cuid()) @id
+// token         String       @unique
+// name          String?
+// email         String?   @unique
+// files         filerecords[]
+// @@map(name: "users")
+// }
+
+model ActivityLogs {
+  id         String   @id @default(cuid())
+  date       DateTime
+  fileName   String
+  fileNumber String
+  action     String
+}
+
+model DailySummary {
+  id            String   @id @default(cuid())
+  date          DateTime
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+model MonthlySummary {
+  id            String @id @default(cuid())
+  date          String
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}

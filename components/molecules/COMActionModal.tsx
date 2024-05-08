@@ -33,24 +33,26 @@ export default function ActionModal(props: props) {
 
     async function dothething(e: any) {
         e.preventDefault()
-        if (action == 'Appraised') {
+
+
+        if (action == 'Approved') {
             const newfiledata = {
                 fileNumber: props.filenumber,
                 actionTaken: action,
-                dateAppraised: dateassigned,
-                dateReturnedtoRegistry: null
+                dateApproved: dateassigned,
+                dateReturnedtoRegistry: null,
+                fileLocation: 'Group'
             }
 
-            const response = await fetch('/api/action/group', {
+            const response = await fetch('/api/action/commissioner', {
                 method: 'POST',
                 body: JSON.stringify(newfiledata)
             })
 
             if (!response.ok) {
-                Notify.failure('lmao')
                 throw new Error(response.statusText)
             } else {
-                Notify.success('File Appraised')
+                Notify.success('File Approved')
 
                 setTimeout(() => {
                     window.location.reload()
@@ -62,8 +64,9 @@ export default function ActionModal(props: props) {
             const newfiledata = {
                 fileNumber: props.filenumber,
                 actionTaken: action,
-                dateAppraised: null,
-                dateReturnedtoRegistry: dateassigned
+                dateApproved: null,
+                dateReturnedtoRegistry: dateassigned,
+                fileLocation: 'Commissioner'
             }
 
             const response = await fetch('/api/action/group', {
@@ -72,10 +75,9 @@ export default function ActionModal(props: props) {
             })
 
             if (!response.ok) {
-                Notify.failure('lol')
                 throw new Error(response.statusText)
             } else {
-                Notify.success('File Returned')
+                Notify.success('File returned')
 
                 setTimeout(() => {
                     window.location.reload()
@@ -119,9 +121,9 @@ export default function ActionModal(props: props) {
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label className='font-semibold' htmlFor="MDAS">MDA</label>
                     <select onChange={(e) => setAction(e.target.value)} className="box-border flex gap-2 rounded-lg w-full bg-transparent border-2 border-gray-100 text-base font-medium px-4 py-4" style={{ maxWidth: '100%' }} name={`ActionTaken`} id={`ActionTaken`}>
-                        <option className="text-xl font-semibold" disabled selected>Select an Action</option>
-                        <option value='Appraised'>Appraised</option>
-                        <option value='Returned'>Returned</option>
+                        <option className="text-xl font-semibold" value="MDAS" disabled selected>Select an Action</option>
+                        <option value='Approved'>Approved</option>
+                        <option value='Returned'>Not Approved</option>
                     </select>
                 </fieldset>
 

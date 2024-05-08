@@ -5,7 +5,11 @@ import content from '@/lib/dropdown-content.json'
 import Dropdown from '../atoms/Dropdown'
 import Button from '../atoms/Button'
 import { useEffect, useState } from 'react';
-import { POST } from '@/app/api/assign/route';
+import { Notify } from 'notiflix';
+import prisma from '@/lib/prisma';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useRouter } from 'next/router';
+
 
 interface props {
     cancel: any,
@@ -15,10 +19,10 @@ interface props {
     // assignedgroup: any,
 }
 
-interface data {
-
-}
 export default function Modal(props: props) {
+    const { user, error, isLoading } = useUser();
+
+    const router = useRouter()
 
     const [mda, setMdapick] = useState('')
     const [assignedgroup, setGrouppick] = useState('')
@@ -26,7 +30,6 @@ export default function Modal(props: props) {
     const [filenumber, setFileNumber] = useState('')
     const [fileamount, setFileamount] = useState('')
     const [dateassigned, setDate] = useState(new Date())
-    const [actiontaken, setActiontaken] = useState('Assigned')
 
     
 
@@ -51,23 +54,37 @@ export default function Modal(props: props) {
         setMdapick(mda.value)
     }
 
-    function Assign(e: any) {
+    async function dothething (e: any) {
         e.preventDefault()
-        let title = document.getElementById("title") as HTMLSelectElement
-        let file_number = document.getElementById("file_number") as HTMLInputElement
-        let amount = document.getElementById("amount") as HTMLInputElement
 
+        const newfiledata = {
+              mda: mda,
+              assignedGroup: assignedgroup,
+              fileTitle: filetitle,
+              fileNumber: filenumber,
+              fileAmount: fileamount,
+              actionTaken: 'Assigned',
+              dateAssigned: dateassigned,
+              userId: user?.name as string,
+              fileLocation: 'Registry',
+              groupDays: '1'
+            }
 
-        var requestOptions: RequestInit = {
+        const response = await fetch('/api/assign', {
             method: 'POST',
-            redirect: 'follow'
-        };
-
-        fetch(`/api/assign?mda=${mda}&assignedgroup=${assignedgroup}&filetitle=${title.value}&filenumber=${file_number.value}&fileamount=${amount.value}&dateassigned=${Date.now() / 1000}&actiontaken=Assigned`, {
-            method: 'POST',
+            body: JSON.stringify(newfiledata)
         })
-            .then((response) => response.json())
-            .catch((error) => console.error(error));
+
+        if (!response.ok) {
+            throw new Error(response.statusText)
+        } else {
+            Notify.success('File Assigned Successfully')
+            setTimeout(() => {
+                window.location.reload()
+            }, 500);
+        }
+
+        return await response.json()
     }
     return (
         <div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: '2' }}>
@@ -114,7 +131,7 @@ export default function Modal(props: props) {
                     <Button onclick={props.cancel}>
                         Close
                     </Button>
-                    <Button onclick={Assign}>
+                    <Button onclick={dothething}>
                         Assign File
                         <Image src={sendIcon} alt='' />
                     </Button>

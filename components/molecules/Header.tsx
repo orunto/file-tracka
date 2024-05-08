@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import logoutIcon from '@/public/icons/basil_logout-solid.svg'
+import Link from "next/link"
 interface props {
     username: any,
     user_role: any,
@@ -10,7 +11,7 @@ interface props {
 
 export default function Header(props: props) {
     return (
-        <nav className="box-border flex justify-between items-center m-0 px-12 py-6">
+        <nav className="box-border flex justify-between items-center m-0">
             <a href="#" className="m-0 text-black text-4xl font-bold">{props.page}</a>
 
             <div className="flex px-8 py-1 border-2 border-gray-900 gap-6 rounded-lg items-start">
@@ -24,10 +25,10 @@ export default function Header(props: props) {
 
                 </article>
 
-                <a href="/api/auth/logout" className="text-red-600 flex items-center">
+                <Link href="/api/auth/logout" className="text-red-600 flex items-center">
                     Logout
                     <Image src={logoutIcon} alt=""/>
-                </a>
+                </Link>
             </div>
         </nav>
     )

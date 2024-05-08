@@ -11,14 +11,16 @@ interface props {
     title: any,
     number: any,
     amount: any,
-    mda: any
+    mda: any,
+    action: any,
 }
 
-export default function DetailsModal(props: props) {
+export default function ActionModal(props: props) {
+
     return (
         <div id={styles["details"]} className="fixed top-0 left-0 w-full h-screen flex items-center justify-center" >
             <form className="flex flex-col gap-8 px-12 py-20 bg-white rounded-2xl max-h-96 overflow-y-scroll" action="" style={{ width: 'max-content' }}>
-                <h1 className='font-bold'>FILE DETAILS</h1>
+                <h1 className='font-bold'>Confirm this file has been recieved</h1>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label htmlFor="mda">MDA</label>
@@ -26,7 +28,7 @@ export default function DetailsModal(props: props) {
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
-                    <label htmlFor="date">Action Date</label>
+                    <label htmlFor="date">Date Assigned</label>
                     <input type="text" name="date" id="date" disabled className="box-border border-2 border-solid border-gray-300 outline-none  flex gap-2 rounded-lg w-full bg-gray-300 text-base font-medium px-4 py-4" style={{ outline: 'none' }} placeholder={props.date} />
                 </fieldset>
 
@@ -48,6 +50,10 @@ export default function DetailsModal(props: props) {
                 <fieldset className='flex gap-4 w-full justify-end' id='button_holder'>
                     <Button onclick={props.cancel}>
                         Close
+                    </Button>
+
+                    <Button onclick={props.action}>
+                        Confirm
                     </Button>
                 </fieldset>
             </form>

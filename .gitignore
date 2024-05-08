@@ -3,8 +3,6 @@
 # dependencies
 /node_modules
 /.pnp
-/app/api/delete
-/prisma
 .pnp.js
 .yarn/install-state.gz
 
@@ -30,7 +28,6 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
-prisma.ts
 
 # vercel
 .vercel
@@ -38,6 +35,5 @@ prisma.ts
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
 
 .vercel
