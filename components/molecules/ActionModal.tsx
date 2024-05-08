@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Dropdown from '../atoms/Dropdown'
 import Button from '../atoms/Button'
 import styles from './layout.module.scss'
-import { ReactElement, JSXElementConstructor, ReactNode, AwaitedReactNode, Key, useState, act } from 'react';
+import { ReactElement, JSXElementConstructor, ReactNode, AwaitedReactNode, Key, useState, } from 'react';
 import { Notify } from 'notiflix';
 
 interface props {
