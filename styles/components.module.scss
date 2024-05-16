@@ -14,3 +14,18 @@
     top: 0;
     left: 0;
 }
+
+#unresolved article {
+    background-color: #fff;
+    border: 1px solid #88C6A0;
+}
+
+#review article {
+    background-color: #fff;
+    border: 1px solid #FFF48C;
+}
+
+#resolved article {
+    background-color: #fff;
+    border: 1px solid #00FFA3;
+}

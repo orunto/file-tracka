@@ -111,7 +111,6 @@ model MonthlySummary {
   returned      Int
 }
 
-
 model MonthlySummaryA {
   id            String @id @default(cuid())
   date          String
@@ -120,7 +119,6 @@ model MonthlySummaryA {
   pending       Int
   returned      Int
 }
-
 
 model MonthlySummaryB {
   id            String @id @default(cuid())
@@ -131,7 +129,6 @@ model MonthlySummaryB {
   returned      Int
 }
 
-
 model MonthlySummaryC {
   id            String @id @default(cuid())
   date          String
@@ -141,7 +138,6 @@ model MonthlySummaryC {
   returned      Int
 }
 
-
 model MonthlySummaryD {
   id            String @id @default(cuid())
   date          String
@@ -149,4 +145,14 @@ model MonthlySummaryD {
   completed     Int
   pending       Int
   returned      Int
+}
+
+model Issues {
+  id         String   @id @default(cuid())
+  issue      String
+  location   String
+  fileNumber String
+  status     String
+  dateIn     DateTime
+  dateOut    DateTime
 }

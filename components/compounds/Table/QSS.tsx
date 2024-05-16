@@ -4,7 +4,7 @@ import TableConsole from "@/components/molecules/TableConsole"
 import eyeIcon from '@/public/icons/mdi_eye.svg'
 import Image from "next/image"
 import DetailsModal from "@/components/molecules/DetailsModal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TablesToggle from "@/components/molecules/TablesToggle"
 import AcceptModal from "@/components/molecules/AcceptModal"
 import { useUser } from "@auth0/nextjs-auth0/client"
@@ -37,63 +37,17 @@ export type props = {
         fileLocation: any,
         groupDays: any,
     }[],
-    pageno: any,
-    viewbutton: any,
-    dbviewbutton: any,
-    psviewbutton: any,
-    comviewbutton: any,
-    rejviewbutton: any,
-    actionbutton: any,
-    dbactionbutton: any,
-    psactionbutton: any,
-    comactionbutton: any,
-    acceptbutton: any,
-    dbacceptbutton: any,
-    psacceptbutton: any,
-    comacceptbutton: any,
     filelocation: any,
-    finish: any
 }
 export default function Table(props: props) {
     const { user, error, isLoading } = useUser();
-
-    const [view, setView] = useState(false)
-    const [dbview, setdbView] = useState(false)
-    const [psview, setpsView] = useState(false)
-    const [comview, setcomView] = useState(false)
-    const [rejview, setrejView] = useState(false)
-    const [action, setAction] = useState(false)
-    const [dbaction, setdbAction] = useState(false)
-    const [psaction, setpsAction] = useState(false)
-    const [comaction, setcomAction] = useState(false)
-    const [accept, setAccept] = useState(false)
-    const [dbaccept, setdbAccept] = useState(false)
-    const [psaccept, setpsAccept] = useState(false)
-    const [comaccept, setcomAccept] = useState(false)
-    const [complete, setComplete] = useState(false)
     const [mykey, setMykey] = useState(0)
     const [filenumber, setfilenumber] = useState(0)
     const [dateReceived, setDate] = useState(new Date())
 
 
     // console.log(props.content[0].dateAssigned.toString());
-
-
-    function closeModal() {
-        setView(false)
-    }
-
-    function cancel() {
-        setAccept(false)
-    }
-
-    function close() {
-        setAction(false)
-    }
-
-    function openModal() {
-        setView(true)
-    }
+    
 
     async function dothething(e: any) {
         e.preventDefault()
@@ -213,8 +167,8 @@ export default function Table(props: props) {
 
     if (props.content.length == 0) {
         return (
-            <div className="flex flex-col justify-between w-full pb-10 overflow-x-scroll" style={{ zIndex: '2' }}>
-                <table className="w-max flex flex-col h-screen">
+            <div className="flex flex-col justify-between w-full pb-10 overflow-scroll h-screen" style={{ zIndex: '2' }}>
+                <table className="w-max flex flex-col h-max">
                     <th className="flex w-max">
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">MDA</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Name</td>
@@ -226,7 +180,7 @@ export default function Table(props: props) {
                         <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">More</td>
                     </th>
 
-                    <tr className="flex w-full h-full items-center justify-center">
+                    <tr className="flex w-full h-screen items-center justify-center">
                         <span className="text-2xl">Nothing to see here yet. Try other tables</span>
                     </tr>
 
@@ -248,8 +202,8 @@ export default function Table(props: props) {
         )
     } else {
         return (
-            <div className="flex flex-col justify-between w-full pb-10 overflow-x-scroll" style={{ zIndex: '2' }}>
-                <table className="w-max flex flex-col h-screen">
+            <div className="flex flex-col justify-between w-full pb-10 overflow-scroll h-screen" style={{ zIndex: '2' }}>
+                <table className="w-max flex flex-col h-max">
                     <th className="flex w-max">
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">MDA</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Name</td>
@@ -288,7 +242,7 @@ export default function Table(props: props) {
                 </table>
 
 
-                <TableConsole no={props.pageno} />
+                {/* <TableConsole no={props.pageno} /> */}
             </div>
         )
 

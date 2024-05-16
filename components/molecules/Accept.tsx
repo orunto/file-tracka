@@ -87,9 +87,9 @@ export default function QSSAction(props: props) {
             throw new Error(response.statusText)
         } else {
             Notify.success('File Assigned Successfully')
-            // setTimeout(() => {
-            //     window.location.reload()
-            // }, 500);
+            setTimeout(() => {
+                window.location.reload()
+            }, 500);
         }
 
         return await response.json()
