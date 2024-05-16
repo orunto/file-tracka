@@ -26,6 +26,11 @@ time, mark, audio, video {
   scroll-behavior: smooth;
 }
 
+body, #__next {
+  height: 100vh;
+  box-sizing: border-box;
+}
+
 button, input {
   font-family: inherit!important;
   cursor: pointer;
@@ -51,8 +56,25 @@ option {
   background-color: #AF202D;
 }
 
-tr {
-  border: 0.5px solid rgb(187, 187, 187);
+td {
+  border: 0.5px solid #88C6A0;
+  border-bottom: none;
+}
+
+tr:last-child {
+  border-bottom: 1.5px solid #88C6A0;
+}
+
+/* table {
+  border: 0.5px solid #88C6A0;
+} */
+
+nav {
+  border-bottom: 2px solid #CAD9D0;
+}
+
+aside {
+  border-right: 2px solid #CAD9D0;
 }
 
 

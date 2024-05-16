@@ -69,5 +69,5 @@ export default function Home() {
         </Button>
       </main>
     </>
-  );
+  )
 }

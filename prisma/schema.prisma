@@ -59,7 +59,43 @@ model ActivityLogs {
 
 model DailySummary {
   id            String   @id @default(cuid())
-  date          DateTime
+  date          DateTime @unique @db.Date
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+model DailySummaryA {
+  id            String   @id @default(cuid())
+  date          DateTime @unique
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+model DailySummaryB {
+  id            String   @id @default(cuid())
+  date          DateTime @unique
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+model DailySummaryC {
+  id            String   @id @default(cuid())
+  date          DateTime @unique
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+model DailySummaryD {
+  id            String   @id @default(cuid())
+  date          DateTime @unique
   numberOfFiles Int
   completed     Int
   pending       Int
@@ -67,6 +103,46 @@ model DailySummary {
 }
 
 model MonthlySummary {
+  id            String @id @default(cuid())
+  date          String
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+
+model MonthlySummaryA {
+  id            String @id @default(cuid())
+  date          String
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+
+model MonthlySummaryB {
+  id            String @id @default(cuid())
+  date          String
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+
+model MonthlySummaryC {
+  id            String @id @default(cuid())
+  date          String
+  numberOfFiles Int
+  completed     Int
+  pending       Int
+  returned      Int
+}
+
+
+model MonthlySummaryD {
   id            String @id @default(cuid())
   date          String
   numberOfFiles Int
