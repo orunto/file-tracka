@@ -1,12 +1,12 @@
 'use client'
 
 import { useUser } from "@auth0/nextjs-auth0/client"
-import SideBar from "@/components/molecules/Sidebar/Others"
+import SideBar from "@/components/molecules/Sidebar/QSS"
 import Header from "@/components/molecules/Header"
 import Button from "@/components/atoms/Button"
 import searchIcon from '@/public/icons/majesticons_search-line.svg'
 import Image from "next/image"
-import Table from "@/components/compounds/WorkTable/Appraised"
+import Table from "@/components/compounds/Table/QSS"
 import Stats from "@/components/compounds/Table/Stats"
 import styles from '@/styles/components.module.scss'
 import { useEffect, useState } from "react"
@@ -14,19 +14,13 @@ import QSSAction from "@/components/molecules/Accept"
 import content from '@/lib/dropdown-content.json'
 import Issues from "@/components/compounds/Issues/QSS"
 import Chart from 'chart.js/auto'
-import prisma from "@/lib/prisma"
-import Queue from "@/components/compounds/WorkTable/DB"
-import Assigned from "@/components/compounds/WorkTable/Assigned"
-import Returned from "@/components/compounds/WorkTable/Returned"
-import Completed from "@/components/compounds/WorkTable/Completed"
-import TablesToggle from "@/components/molecules/TablesToggle"
+import * as XLSX from 'xlsx';
 import Logs from "@/components/compounds/Table/Logs"
 
-export default function DirectorBudget() {
+export default function QSS() {
     const { user } = useUser()
 
     const [table, setTable] = useState(true)
-    const [work, setWork] = useState(false)
     const [stats, setStats] = useState(false)
     const [issues, setIssues] = useState(false)
     const [logs, setLogs] = useState(false)
@@ -36,79 +30,52 @@ export default function DirectorBudget() {
     const [statrows, setStatRows] = useState<any[]>([])
     const [logrows, setLogRows] = useState<any[]>([])
 
-    // SideBar Shenanigans
     const [tableIcon, setTableIcon] = useState('#101010')
-    const [workIcon, setWorkIcon] = useState('#ABAAAA')
     const [statsIcon, setStatsIcon] = useState('#ABAAAA')
     const [issuesIcon, setIssuesIcon] = useState('#ABAAAA')
     const [logsIcon, setLogsIcon] = useState('#ABAAAA')
 
-    // Table
     const [xValues, setXValues] = useState<any[]>([])
     const [yValues, setYValues] = useState<any[]>([])
 
     const [highest, setHighest] = useState(0)
 
-    const [notifications, setNotifications] = useState<any[]>([])
-
-    // Table Toggle
-    const [queue, setQueue] = useState(true)
-    const [assigned, setAssigned] = useState(false)
-    const [returned, setReturned] = useState(false)
-    const [completed, setCompleted] = useState(false)
-    const [buttonColor, setButtonColor] = useState("button_one")
-    const [line, setLine] = useState("0%")
-
 
     const [rows, setRows] = useState<any[]>([])
-    function getAccepted() {
-        fetch('/api/get/accepted').then(response => response.json()).then((result) => setRows(result))
-    }
-
-    function getAssigned() {
-        fetch('/api/get/assigned').then(response => response.json()).then((result) => setRows(result))
-    }
-
-    function getQueue() {
-        fetch('/api/get/accepted').then(response => response.json()).then((result) => setRows(result))
-    }
-
-    function getReturned() {
-        fetch('/api/get/returned/registry').then(response => response.json()).then((result) => setRows(result))
-    }
-
-    function getCompleted() {
-        fetch('/api/get/completed').then(response => response.json()).then((result) => setRows(result))
+    function getAll() {
+        fetch('/api/get/all').then(response => response.json()).then((result) => setRows(result))
     }
 
     function getStats() {
         fetch('/api/get/stats').then(response => response.json()).then((result) => setStatRows(result))
     }
 
-    function getNotifications() {
-        fetch('/api/get/notifications/registry').then(response => response.json()).then((result) => setNotifications(result))
-
-    }
-
     function getLogs() {
-        fetch('/api/get/logs/registry').then(response => response.json()).then((result) => setLogRows(result))
+        fetch('/api/get/logs/all').then(response => response.json()).then((result) => setLogRows(result))
 
     }
+
+    // function getNumbers() {
+    //     fetch('/api/count/all/total').then(response => response.json()).then((result) => console.log(result))
+    //     fetch('/api/count/all/completed').then(response => response.json()).then((result) => console.log(result))
+    //     fetch('/api/count/all/pending').then(response => response.json()).then((result) => console.log(result))
+    //     fetch('/api/count/all/returned').then(response => response.json()).then((result) => console.log(result))
+    // }
+
+
 
 
     useEffect(() => {
         const size_no: number[] = []
         const y_no: number[] = []
         const MDASArray = [...content.MDAS.A, ...content.MDAS.B, ...content.MDAS.C, ...content.MDAS.D]
-        getAccepted()
+        getAll()
 
         setMDAS(MDASArray)
 
-        getNotifications()
+        getStats()
 
         getLogs()
-
-        getStats()
 
         for (let s = 1; s <= 31; s += 2) {
             size_no.push(s)
@@ -128,44 +95,38 @@ export default function DirectorBudget() {
         // getNumbers()
     }, [table, stats])
 
-    function showWork() {
-        setWork(true)
-        setTable(false)
-        setStats(false)
-        setIssues(false)
-        setTableIcon('#ABAAAA')
-        setStatsIcon('#ABAAAA')
-        setIssuesIcon('#ABAAAA')
-        setWorkIcon('#101010')
-        setLogsIcon('#ABAAAA')
-        setLogs(false)
-        getQueue()
+    function DownloadAll() {
+        const worksheet = XLSX.utils.json_to_sheet(rows)
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "All Files");
+
+        XLSX.writeFile(workbook, "All Files.xlsx", { compression: true });
     }
 
     function showTable() {
         setTable(true)
-        setWork(false)
         setStats(false)
         setIssues(false)
-        setLogsIcon('#ABAAAA')
-        setWorkIcon('#ABAAAA')
         setLogs(false)
         setTableIcon('#101010')
         setStatsIcon('#ABAAAA')
         setIssuesIcon('#ABAAAA')
+        setLogsIcon('#ABAAAA')
+
+        getAll()
     }
 
     function showStats() {
         setTable(false)
-        setWork(false)
         setStats(true)
         setIssues(false)
+        setLogs(false)
         setTableIcon('#ABAAAA')
         setStatsIcon('#101010')
         setIssuesIcon('#ABAAAA')
-        setWorkIcon('#ABAAAA')
         setLogsIcon('#ABAAAA')
-        setLogs(false)
+        getStats()
 
         setTimeout(() => {
             new Chart("myChart", {
@@ -200,90 +161,43 @@ export default function DirectorBudget() {
     }
 
     function showIssues() {
-        setWork(false)
         setTable(false)
         setStats(false)
         setIssues(true)
+        setLogs(false)
         setTableIcon('#ABAAAA')
         setStatsIcon('#ABAAAA')
-        setWorkIcon('#ABAAAA')
         setIssuesIcon('#101010')
         setLogsIcon('#ABAAAA')
-        setLogs(false)
     }
 
     function showLogs() {
-        setWork(false)
         setTable(false)
         setStats(false)
         setIssues(false)
         setLogs(true)
         setTableIcon('#ABAAAA')
         setStatsIcon('#ABAAAA')
-        setWorkIcon('#ABAAAA')
         setIssuesIcon('#ABAAAA')
         setLogsIcon('#101010')
-        getLogs()
     }
 
 
-    // Table Toggle
-
-    function showQueue() {
-        setQueue(true)
-        setAssigned(false)
-        setReturned(false)
-        setCompleted(false)
-        setLine('0%')
-        setButtonColor("button_one")
-        getQueue()
-    }
-
-    function showAssigned() {
-        setQueue(false)
-        setAssigned(true)
-        setReturned(false)
-        setCompleted(false)
-        setLine('100%')
-        setButtonColor("button_two")
-        getAssigned()
-    }
-
-    function showReturned() {
-        setQueue(false)
-        setAssigned(false)
-        setReturned(true)
-        setCompleted(false)
-        setLine('200%')
-        setButtonColor("button_three")
-        getReturned()
-    }
-
-    function showCompleted() {
-        setQueue(false)
-        setAssigned(false)
-        setReturned(false)
-        setCompleted(true)
-        setLine('300%')
-        setButtonColor("button_four")
-        getCompleted()
-    }
 
 
     if (user) {
         if (user.sub == process.env.AUTH0_SUPER) {
             return (
                 <main className='box-border flex w-screen h-screen overflow-hidden relative'>
-                    <SideBar worktable={showWork} logstable={showLogs} statstable={showStats} icons={{
+                    <SideBar worktable={showTable} logstable={showLogs} statstable={showStats} icons={{
                         tableIcon: tableIcon,
                         statsIcon: statsIcon,
                         issuesIcon: issuesIcon,
-                        logsIcon: logsIcon,
-                        workIcon: workIcon
-                    }} alltable={showTable} issuestable={showIssues} />
+                        logsIcon: logsIcon
+                    }} issuestable={showIssues} />
 
                     <section className='box-border flex flex-col w-full gap-16 relative h-full overflow-x-hidden'>
-                        <Header user_role={`Beta Tester`} username={user.name} page={`Director of Budget`} notification={notifications} />
+                        <Header user_role={`Beta Tester`} username={user.name} page={`Director of Budget`} notification={[]} />
 
                         <section className='flex flex-col items-end box-border h-full gap-10 p-10'>
                             {
@@ -291,67 +205,14 @@ export default function DirectorBudget() {
                                     <>
                                         <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
                                             <button className="flex items-center justify-center cursor-pointer bg-transparent border-none"><Image src={searchIcon} alt='' /></button>
-                                            <Button onclick={undefined}>Download Table</Button>
+                                            <Button onclick={() => setAction(true)}>Add New File</Button>
+                                            <Button onclick={DownloadAll}>Download Table</Button>
                                         </div>
 
                                         <Table
                                             actions={[]}
                                             headers={[]}
-                                            filelocation={'DB'} content={rows} />
-                                    </>
-                                )
-                            }
-
-                            {
-                                work && (
-                                    <>
-                                        <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
-                                            <button className="flex items-center justify-center cursor-pointer bg-transparent border-none"><Image src={searchIcon} alt='' /></button>
-                                            <Button onclick={undefined}>Download Table</Button>
-                                        </div>
-
-                                        <TablesToggle buttoncolor={buttonColor} clickeventone={showQueue} clickeventtwo={showAssigned} clickeventthree={showReturned} clickeventfour={showCompleted} buttonone={`Queue`} buttontwo={`Assigned`} buttonthree={`Returned`} buttonfour={`Completed`} line={line} />
-
-
-                                        {
-                                            queue && (
-
-                                                <Queue
-                                                    actions={[]}
-                                                    headers={[]}
-                                                    filelocation={undefined} content={rows} />
-                                            )
-                                        }
-
-                                        {
-                                            assigned && (
-
-                                                <Assigned
-                                                    actions={[]}
-                                                    headers={[]}
-                                                    filelocation={undefined} content={rows} />
-                                            )
-                                        }
-
-                                        {
-                                            returned && (
-
-                                                <Returned
-                                                    actions={[]}
-                                                    headers={[]}
-                                                    filelocation={undefined} content={rows} />
-                                            )
-                                        }
-
-                                        {
-                                            completed && (
-
-                                                <Completed
-                                                    actions={[]}
-                                                    headers={[]}
-                                                    filelocation={undefined} content={rows} />
-                                            )
-                                        }
+                                            filelocation={undefined} content={rows} />
                                     </>
                                 )
                             }
@@ -384,7 +245,7 @@ export default function DirectorBudget() {
                                         <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
                                             <Button onclick={undefined}>Download Table</Button>
                                         </div>
-
+                                        
                                         <Logs actions={[]} headers={[]} content={logrows} filelocation={undefined} />
                                     </>
                                 )

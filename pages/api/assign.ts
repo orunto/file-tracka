@@ -15,6 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             fileNumber: fileInfo.fileNumber
         },
         data : {
+            actionTaken: fileInfo.actionTaken,
             fileLocation: fileInfo.fileLocation,
             dateAssigned: fileInfo.dateAssigned,
         }

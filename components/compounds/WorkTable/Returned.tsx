@@ -47,6 +47,14 @@ export default function WorkTable(props: props) {
     const [filenumber, setfilenumber] = useState(0)
     const [dateReceived, setDate] = useState(new Date())
 
+    const [confirm, setConfirm] = useState(false)
+    const [date, setFiledate] = useState("")
+    const [mda, setmda] = useState("")
+    const [amount, setamount] = useState("")
+    const [actionTaken, setactiontaken] = useState("")
+    const [title, settitle] = useState("")
+    const [number, setnumber] = useState("")
+
     if (props.content.length == 0) {
         return (
             <div className="flex flex-col justify-between w-full pb-10 overflow-scroll h-screen" style={{ zIndex: '2' }}>
@@ -110,30 +118,59 @@ export default function WorkTable(props: props) {
                             <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileLocation}</span></td>
                             {
                                 clone.dateReturnedtoRegistry && (
-                                    <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateReturnedtoRegistry.substring(0, 10)}</span></td>
+
+                                    <>
+
+                                        <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateReturnedtoRegistry.substring(0, 10)}</span></td>
+
+                                        <td onClick={() => {
+                                            setmda(clone.mda)
+                                            setamount(clone.fileAmount)
+                                            settitle(clone.fileTitle)
+                                            setnumber(clone.fileNumber)
+                                            setactiontaken(clone.actionTaken)
+                                            setFiledate(clone.dateReturnedtoRegistry.substring(0, 10))
+                                            setConfirm(true)
+                                        }} className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
+                                            Action
+                                            <Image src={workIcon} alt="" />
+                                        </td>
+                                    </>
 
                                 )
                             }
 
-{
+                            {
                                 clone.dateReturnedtoGroup && (
-                                    <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateReturnedtoGroup.substring(0, 10)}</span></td>
+                                    <>
+                                        <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateReturnedtoGroup.substring(0, 10)}</span></td>
+
+                                        <td onClick={() => {
+                                            setmda(clone.mda)
+                                            setamount(clone.fileAmount)
+                                            settitle(clone.fileTitle)
+                                            setnumber(clone.fileNumber)
+                                            setactiontaken(clone.actionTaken)
+                                            setFiledate(clone.dateReturnedtoGroup.substring(0, 10))
+                                            setConfirm(true)
+                                        }} className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
+                                            Action
+                                            <Image src={workIcon} alt="" />
+                                        </td>
+                                    </>
 
                                 )
                             }
-                            <td className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
-                                Action
-                                <Image src={workIcon} alt="" />
-                            </td>
+
 
                         </tr>
                     ))}
 
                     {
-                        
+
                     }
                 </table>
-                
+
 
 
                 {/* <TableConsole no={props.pageno} /> */}

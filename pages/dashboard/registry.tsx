@@ -66,11 +66,11 @@ export default function Registry() {
     }
 
     function getAssigned() {
-        fetch('/api/get/assigned').then(response => response.json()).then((result) => setRows(result))
+        fetch('/api/get/assigned/registry').then(response => response.json()).then((result) => setRows(result))
     }
 
     function getQueue() {
-        fetch('/api/get/accepted').then(response => response.json()).then((result) => setRows(result))
+        fetch('/api/get/registryqueue').then(response => response.json()).then((result) => setRows(result))
     }
 
     function getReturned() {

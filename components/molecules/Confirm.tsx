@@ -34,7 +34,7 @@ export default function Confirm(props: props) {
     const [mda, setMdapick] = useState('')
     const [assignedgroup, setGrouppick] = useState('')
     const [filetitle, setFiletitle] = useState('')
-    const [filenumber, setFileNumber] = useState('')
+    const [number, setFileNumber] = useState('')
     const [fileamount, setFileamount] = useState('')
     const [dateassigned, setDate] = useState(new Date())
 
@@ -66,35 +66,25 @@ export default function Confirm(props: props) {
 
 
         Loading.pulse("Confirming...")
-        const newfiledata = {
-            mda: mda,
-            fileTitle: filetitle,
-            fileNumber: filenumber,
-            fileAmount: fileamount,
-            assignedGroup: assignedgroup,
-            actionTaken: 'Accepted',
-            fileLocation: 'QSS',
-            dateAccepted: dateassigned
-        }
 
         const activity = {
             date: dateassigned,
-            fileName: filetitle,
-            fileNumber: filenumber,
-            action: 'Accepted',
+            fileName: props.title,
+            fileNumber: props.number,
+            action: `Confirmed in ${props.fileLocation}`,
             user: user?.name as string
         }
 
-        const notice = {
-            for: 'Registry',
-            message: `File: ${filenumber} added to queue`,
-            date: dateassigned
-        }
+        // const notice = {
+        //     for: 'Registry',
+        //     message: `File: ${props.number} added to queue`,
+        //     date: dateassigned
+        // }
         // userId: user?.name as string,
 
         if (props.fileLocation == 'Registry') {
             const newfiledata = {
-                fileNumber: filenumber,
+                fileNumber: props.number,
                 fileLocation: props.fileLocation,
                 dateGroupReceived: new Date(),
                 dateDBReceived: null,
@@ -115,13 +105,13 @@ export default function Confirm(props: props) {
                 body: JSON.stringify(activity)
             })
 
-            const notify = await fetch('/api/notify', {
-                method: 'POST',
-                body: JSON.stringify(notice)
-            })
+            // const notify = await fetch('/api/notify', {
+            //     method: 'POST',
+            //     body: JSON.stringify(notice)
+            // })
 
 
-            if (!response.ok || !log.ok || !record.ok || !notify.ok) {
+            if (!response.ok || !log.ok || !record.ok) {
                 Loading.remove()
                 Notify.failure(response.statusText)
                 throw new Error(response.statusText)
@@ -137,7 +127,7 @@ export default function Confirm(props: props) {
 
         } else if (props.fileLocation == 'Group') {
             const newfiledata = {
-                fileNumber: filenumber,
+                fileNumber: props.number,
                 fileLocation: props.fileLocation,
                 dateGroupReceived: new Date(),
                 dateDBReceived: null,
@@ -158,13 +148,13 @@ export default function Confirm(props: props) {
                 body: JSON.stringify(activity)
             })
 
-            const notify = await fetch('/api/notify', {
-                method: 'POST',
-                body: JSON.stringify(notice)
-            })
+            // const notify = await fetch('/api/notify', {
+            //     method: 'POST',
+            //     body: JSON.stringify(notice)
+            // })
 
 
-            if (!response.ok || !log.ok || !record.ok || !notify.ok) {
+            if (!response.ok || !log.ok || !record.ok) {
                 Loading.remove()
                 Notify.failure(response.statusText)
                 throw new Error(response.statusText)
@@ -180,7 +170,7 @@ export default function Confirm(props: props) {
 
         } else if (props.fileLocation == 'DB') {
             const newfiledata = {
-                fileNumber: filenumber,
+                fileNumber: props.number,
                 fileLocation: props.fileLocation,
                 dateGroupReceived: null,
                 dateDBReceived: new Date(),
@@ -201,13 +191,13 @@ export default function Confirm(props: props) {
                 body: JSON.stringify(activity)
             })
 
-            const notify = await fetch('/api/notify', {
-                method: 'POST',
-                body: JSON.stringify(notice)
-            })
+            // const notify = await fetch('/api/notify', {
+            //     method: 'POST',
+            //     body: JSON.stringify(notice)
+            // })
 
 
-            if (!response.ok || !log.ok || !record.ok || !notify.ok) {
+            if (!response.ok || !log.ok || !record.ok) {
                 Loading.remove()
                 Notify.failure(response.statusText)
                 throw new Error(response.statusText)
@@ -223,7 +213,7 @@ export default function Confirm(props: props) {
 
         } else if (props.fileLocation == 'PS') {
             const newfiledata = {
-                fileNumber: filenumber,
+                fileNumber: props.number,
                 fileLocation: props.fileLocation,
                 dateGroupReceived: null,
                 dateDBReceived: null,
@@ -245,13 +235,13 @@ export default function Confirm(props: props) {
                 body: JSON.stringify(activity)
             })
 
-            const notify = await fetch('/api/notify', {
-                method: 'POST',
-                body: JSON.stringify(notice)
-            })
+            // const notify = await fetch('/api/notify', {
+            //     method: 'POST',
+            //     body: JSON.stringify(notice)
+            // })
 
 
-            if (!response.ok || !log.ok || !record.ok || !notify.ok) {
+            if (!response.ok || !log.ok || !record.ok) {
                 Loading.remove()
                 Notify.failure(response.statusText)
                 throw new Error(response.statusText)
@@ -267,7 +257,7 @@ export default function Confirm(props: props) {
 
         } else if (props.fileLocation == 'Commissioner') {
             const newfiledata = {
-                fileNumber: filenumber,
+                fileNumber: props.number,
                 fileLocation: props.fileLocation,
                 dateGroupReceived: null,
                 dateDBReceived: null,
@@ -289,13 +279,13 @@ export default function Confirm(props: props) {
                 body: JSON.stringify(activity)
             })
 
-            const notify = await fetch('/api/notify', {
-                method: 'POST',
-                body: JSON.stringify(notice)
-            })
+            // const notify = await fetch('/api/notify', {
+            //     method: 'POST',
+            //     body: JSON.stringify(notice)
+            // })
 
 
-            if (!response.ok || !log.ok || !record.ok || !notify.ok) {
+            if (!response.ok || !log.ok || !record.ok) {
                 Loading.remove()
                 Notify.failure(response.statusText)
                 throw new Error(response.statusText)

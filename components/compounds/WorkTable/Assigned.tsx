@@ -13,6 +13,7 @@ import COMActionModal from '@/components/molecules/COMActionModal'
 import DBActionModal from '@/components/molecules/DBActionModal'
 import PSActionModal from '@/components/molecules/PSActionModal'
 import { Notify } from "notiflix"
+import Confirm from "@/components/molecules/Confirm"
 
 export type props = {
     actions: any[],
@@ -45,6 +46,14 @@ export default function WorkTable(props: props) {
     const [mykey, setMykey] = useState(0)
     const [filenumber, setfilenumber] = useState(0)
     const [dateReceived, setDate] = useState(new Date())
+
+    const [confirm, setConfirm] = useState(false)
+    const [date, setFiledate] = useState("")
+    const [mda, setmda] = useState("")
+    const [amount, setamount] = useState("")
+    const [actionTaken, setactiontaken] = useState("")
+    const [title, settitle] = useState("")
+    const [number, setnumber] = useState("")
 
     if (props.content.length == 0) {
         return (
@@ -93,7 +102,7 @@ export default function WorkTable(props: props) {
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Status</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
-                        <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">Action</td>
+                        {/* <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">Action</td> */}
                     </th>
 
                     {props.content.map((clone, i) => (
@@ -114,20 +123,30 @@ export default function WorkTable(props: props) {
                                 )
                             }
 
-                            
-                            <td className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
-                                Action
+
+                            <td onClick={() => {
+                                setmda(clone.mda)
+                                setamount(clone.fileAmount)
+                                settitle(clone.fileTitle)
+                                setnumber(clone.fileNumber)
+                                setactiontaken(clone.actionTaken)
+                                setFiledate(clone.dateAssigned.substring(0, 10))
+                                setConfirm(true)
+                            }} className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
+                                View
                                 <Image src={workIcon} alt="" />
                             </td>
 
                         </tr>
                     ))}
 
-                    {
-                        
-                    }
                 </table>
-                
+
+                {
+                    confirm && (
+                        <Confirm cancel={() => setConfirm(false)} mdas={[]} fileLocation={props.filelocation} date={date.substring(0, 10)} title={title} number={number} amount={amount} mda={mda} action={actionTaken} />
+                    )
+                }
 
 
                 {/* <TableConsole no={props.pageno} /> */}

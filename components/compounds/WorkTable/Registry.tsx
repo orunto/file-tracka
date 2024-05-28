@@ -13,6 +13,7 @@ import COMActionModal from '@/components/molecules/COMActionModal'
 import DBActionModal from '@/components/molecules/DBActionModal'
 import PSActionModal from '@/components/molecules/PSActionModal'
 import { Notify } from "notiflix"
+import AssignModal from "@/components/molecules/AssignModal"
 
 export type props = {
     actions: any[],
@@ -45,6 +46,15 @@ export default function WorkTable(props: props) {
     const [mykey, setMykey] = useState(0)
     const [filenumber, setfilenumber] = useState(0)
     const [dateReceived, setDate] = useState(new Date())
+
+    const [confirm, setConfirm] = useState(false)
+    const [date, setFiledate] = useState("")
+    const [mda, setmda] = useState("")
+    const [amount, setamount] = useState("")
+    const [actionTaken, setactiontaken] = useState("")
+    const [title, settitle] = useState("")
+    const [number, setnumber] = useState("")
+    const [group, setGroup] = useState("")
 
     if (props.content.length == 0) {
         return (
@@ -113,7 +123,16 @@ export default function WorkTable(props: props) {
 
                                 )
                             }
-                            <td className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
+                            <td onClick={() => {
+                                setmda(clone.mda)
+                                setamount(clone.fileAmount)
+                                settitle(clone.fileTitle)
+                                setnumber(clone.fileNumber)
+                                setactiontaken(clone.actionTaken)
+                                setFiledate(clone.dateAccepted.substring(0, 10))
+                                setGroup(clone.assignedGroup)
+                                setConfirm(true)
+                            }} className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
                                 Action
                                 <Image src={workIcon} alt="" />
                             </td>
@@ -121,11 +140,13 @@ export default function WorkTable(props: props) {
                         </tr>
                     ))}
 
-                    {
-                        
-                    }
                 </table>
-                
+
+                {
+                    confirm && (
+                        <AssignModal group={group} cancel={() => setConfirm(false)} mdas={[]} fileLocation={props.filelocation} date={date.substring(0, 10)} title={title} number={number} amount={amount} mda={mda} action={actionTaken} />
+                    )
+                }
 
 
                 {/* <TableConsole no={props.pageno} /> */}

@@ -9,14 +9,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const assigned = await prisma.filerecords.findMany({
-        where: { actionTaken: 'Returned' },
+        where: { actionTaken: 'Approved' },
         select: {
             mda: true,
             assignedGroup: true,
             fileTitle: true,
             fileNumber: true,
             fileAmount: true,
-            dateReturnedtoGroup: true,
+            dateApproved: true,
             actionTaken: true,
             fileLocation: true
         }

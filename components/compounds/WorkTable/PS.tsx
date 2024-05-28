@@ -47,6 +47,14 @@ export default function WorkTable(props: props) {
     const [filenumber, setfilenumber] = useState(0)
     const [dateReceived, setDate] = useState(new Date())
 
+    const [confirm, setConfirm] = useState(false)
+    const [date, setFiledate] = useState("")
+    const [mda, setmda] = useState("")
+    const [amount, setamount] = useState("")
+    const [actionTaken, setactiontaken] = useState("")
+    const [title, settitle] = useState("")
+    const [number, setnumber] = useState("")
+
     if (props.content.length == 0) {
         return (
             <div className="flex flex-col justify-between w-full pb-10 overflow-scroll h-screen" style={{ zIndex: '2' }}>
