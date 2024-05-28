@@ -15,10 +15,11 @@ model filerecords {
   mda                     String
   assignedGroup           String
   fileTitle               String
-  fileNumber              String
+  fileNumber              String    @unique
   fileAmount              String
-  dateAssigned            DateTime
   actionTaken             String
+  dateAccepted            DateTime
+  dateAssigned            DateTime?
   fileLocation            String?
   dateAppraised           DateTime?
   dateDBRecommended       DateTime?
@@ -28,16 +29,19 @@ model filerecords {
   dateReturnedtoGroup     DateTime?
   dateReturnedtoRegistry  DateTime?
   dateReturnedtoMDA       DateTime?
+  dateRegistryRecieved    DateTime?
   dateGroupReceived       DateTime?
-  groupDays               String?
+  dateCompleted           DateTime?
+  groupDays               Int?
   dateDBReceived          DateTime?
-  dbDays                  DateTime?
+  dbDays                  Int?
   datePSReceived          DateTime?
-  psDays                  DateTime?
+  psDays                  Int?
   dateCommissonerReceived DateTime?
-  commissionerDays        DateTime?
+  commissionerDays        Int?
+  totalDays               Int?
   // user                      User? @relation(fields: [userId], references: [token])
-  userId                  String
+  // userId                  String
 }
 
 // model User {
@@ -55,10 +59,12 @@ model ActivityLogs {
   fileName   String
   fileNumber String
   action     String
+  user       String
 }
 
 model DailySummary {
   id            String   @id @default(cuid())
+  day           Int      @unique
   date          DateTime @unique @db.Date
   numberOfFiles Int
   completed     Int
@@ -95,7 +101,8 @@ model DailySummaryC {
 
 model DailySummaryD {
   id            String   @id @default(cuid())
-  date          DateTime @unique
+  day           Int      @unique
+  date          DateTime
   numberOfFiles Int
   completed     Int
   pending       Int
@@ -155,4 +162,11 @@ model Issues {
   status     String
   dateIn     DateTime
   dateOut    DateTime
+}
+
+model Notifications {
+  id      String   @id @default(cuid())
+  for     String
+  message String
+  date    DateTime
 }

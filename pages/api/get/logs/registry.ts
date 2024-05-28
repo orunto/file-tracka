@@ -8,7 +8,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(405).json({ message: 'Not allowed' })
     }
 
-    const assigned = await prisma.filerecords.findMany();
+    const assigned = await prisma.activityLogs.findMany({
+        where: {
+            action: 'Assigned'
+        }
+    });
 
     res.json(assigned)
 }

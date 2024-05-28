@@ -5,7 +5,7 @@ import content from '@/lib/dropdown-content.json'
 import Dropdown from '@/components/atoms/Dropdown'
 import Button from '@/components/atoms/Button'
 import { useEffect, useState } from 'react';
-import { Notify } from 'notiflix';
+import { Loading, Notify } from 'notiflix';
 import prisma from '@/lib/prisma';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
@@ -51,25 +51,39 @@ export default function QSSAction(props: props) {
 
     function setGroup() {
         let mda = document.getElementById("MDA") as HTMLSelectElement
-
+        
         setMdapick(mda.value)
     }
-
+    
     async function dothething(e: any) {
         e.preventDefault()
-
+        
+        Loading.pulse("Adding to System...")
         const newfiledata = {
             mda: mda,
-            assignedGroup: assignedgroup,
             fileTitle: filetitle,
             fileNumber: filenumber,
             fileAmount: fileamount,
-            actionTaken: 'Assigned',
-            dateAssigned: dateassigned,
-            userId: user?.name as string,
+            assignedGroup: assignedgroup,
+            actionTaken: 'Accepted',
             fileLocation: 'QSS',
-            groupDays: '1'
+            dateAccepted: dateassigned
         }
+
+        const activity = {
+            date: dateassigned,
+            fileName: filetitle,
+            fileNumber: filenumber,
+            action: 'Accepted',
+            user: user?.name as string
+        }
+
+        const notice = {
+            for: 'Registry',
+            message: `File: ${filenumber} added to queue`,
+            date: dateassigned
+        }
+        // userId: user?.name as string,
 
         const record = await fetch('/api/count/allfiles', {
             method: 'POST'
@@ -78,15 +92,29 @@ export default function QSSAction(props: props) {
         console.log(record.json());
         
 
-        const response = await fetch('/api/assign', {
+        const response = await fetch('/api/accept', {
             method: 'POST',
             body: JSON.stringify(newfiledata)
         })
 
-        if (!response.ok) {
+        const log = await fetch('/api/log', {
+            method: 'POST',
+            body: JSON.stringify(activity)
+        })
+
+        const notify = await fetch('/api/notify', {
+            method: 'POST',
+            body: JSON.stringify(notice)
+        })
+
+
+        if (!response.ok || !log.ok || !record.ok || !notify.ok) {
+            Loading.remove()
+            Notify.failure(response.statusText)
             throw new Error(response.statusText)
         } else {
-            Notify.success('File Assigned Successfully')
+            Loading.remove()
+            Notify.success('File Accepted Successfully')
             setTimeout(() => {
                 window.location.reload()
             }, 500);
@@ -101,14 +129,15 @@ export default function QSSAction(props: props) {
             <div className='flex flex-col gap-8'>
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>
                     <label className='font-semibold' htmlFor="MDAS">MDA</label>
-                    <select onChange={setGroup} className="box-border flex gap-2 rounded-lg w-full bg-transparent border-2 border-gray-100 text-base font-medium px-4 py-4" style={{ maxWidth: '100%' }} name={`MDA`} id={`MDA`}>
+                    <input onChange={(e) => setMdapick(e.target.value)} placeholder='MDA' list="MDA" className="box-border flex gap-2 rounded-lg w-full bg-transparent border-2 border-gray-100 text-base font-medium px-4 py-4" style={{ maxWidth: '100%', borderStyle: 'solid' }} />
+                    <datalist id={`MDA`}>
                         <option className="text-xl font-semibold" value="MDAS" disabled selected>Select an MDA</option>
                         {
                             props.mdas.map((clone, i) => (
                                 <option value={clone} key={i}>{clone}</option>
                             ))
                         }
-                    </select>
+                    </datalist>
                 </fieldset>
 
                 <fieldset className='flex flex-col gap-4 w-96' style={{ width: '560px' }}>

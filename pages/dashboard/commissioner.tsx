@@ -1,248 +1,408 @@
 'use client'
-import Dropdown from '@/components/atoms/Dropdown';
-import { Notify } from 'notiflix'
-import Button from '@/components/atoms/Button';
-import SearchBar from '@/components/atoms/SearchBar';
-import { useUser } from '@auth0/nextjs-auth0/client';
+
+import { useUser } from "@auth0/nextjs-auth0/client"
+import SideBar from "@/components/molecules/Sidebar/Others"
+import Header from "@/components/molecules/Header"
+import Button from "@/components/atoms/Button"
+import searchIcon from '@/public/icons/majesticons_search-line.svg'
+import Image from "next/image"
+import Table from "@/components/compounds/Table/Registry"
+import Stats from "@/components/compounds/Table/Stats"
+import styles from '@/styles/components.module.scss'
+import { useEffect, useState } from "react"
+import QSSAction from "@/components/molecules/Accept"
 import content from '@/lib/dropdown-content.json'
-import Header from '@/components/molecules/Header';
-import Table from '@/components/compounds/Table';
-let header = [`MDA`, `File Title`, `File Number`, `Amount`, `Date Received`, `Action Taken`, ``]
-let row = [`Bureau of Information Technology`, `A`, `General Expenditures and`, `0000001`, `20,000,000.00`, `18/04/2024`,]
-import DetailsModal from '@/components/molecules/DetailsModal';
-import sendIcon from '@/public/icons/iconamoon_send-fill.svg'
-import Image from 'next/image';
-import AssignModal from '@/components/molecules/AssignModal';
-import { useEffect, useState } from 'react';
-import TablesToggle from '@/components/molecules/TablesToggle';
-import prisma from '@/lib/prisma';
-import { GetServerSideProps, GetStaticProps } from 'next';
-import { props } from '@/components/compounds/Table';
-import ActionModal from '@/components/molecules/AcceptModal';
-import { usePathname } from 'next/navigation';
-import SideBar from '@/components/molecules/SideBar';
-import LogsTable from '@/components/compounds/LogsTable';
-import StatsTable from '@/components/compounds/StatsTable';
+import Issues from "@/components/compounds/Issues/QSS"
+import Chart from 'chart.js/auto'
+import prisma from "@/lib/prisma"
+import Queue from "@/components/compounds/WorkTable/Registry"
+import Assigned from "@/components/compounds/WorkTable/Assigned"
+import Returned from "@/components/compounds/WorkTable/Returned"
+import Completed from "@/components/compounds/WorkTable/Completed"
+import TablesToggle from "@/components/molecules/TablesToggle"
+import Logs from "@/components/compounds/Table/Logs"
 
+export default function Commissioner() {
+    const { user } = useUser()
 
-export const getStaticProps: GetStaticProps = async () => {
-    const assigned = await prisma.filerecords.findMany({
-        where: { actionTaken: 'Recommended', fileLocation: 'PS' },
-        select: {
-            mda: true,
-            assignedGroup: true,
-            fileTitle: true,
-            fileNumber: true,
-            fileAmount: true,
-            datePSRecommended: true,
-            actionTaken: true,
-        }
-    });
-    const queue = await prisma.filerecords.findMany({
-        where: { actionTaken: 'Recommended', fileLocation: 'Commissioner' },
-        select: {
-            mda: true,
-            assignedGroup: true,
-            fileTitle: true,
-            fileNumber: true,
-            fileAmount: true,
-            dateCommissonerReceived: true,
-            actionTaken: true,
-            groupDays: true
-        }
-    });
-    const returned = await prisma.filerecords.findMany({
-        where: { actionTaken: 'Returned', fileLocation: 'Commissioner' },
-        select: {
-            mda: true,
-            fileTitle: true,
-            fileNumber: true,
-            fileAmount: true,
-            fileLocation: true,
-            dateReturnedtoRegistry: true,
-            actionTaken: true,
-        }
-    });
-    const track = await prisma.filerecords.findMany({
-        where: { actionTaken: 'Approved', },
-        select: {
-            mda: true,
-            assignedGroup: true,
-            fileTitle: true,
-            fileNumber: true,
-            fileAmount: true,
-            dateAppraised: true,
-            actionTaken: true,
-        }
-    });
-    return {
-        props: {
-            assigned: JSON.parse(JSON.stringify(assigned)),
-            queue: JSON.parse(JSON.stringify(queue)),
-            returned: JSON.parse(JSON.stringify(returned)),
-            track: JSON.parse(JSON.stringify(track)),
-        },
-        revalidate: 10,
-    };
-};
+    const [table, setTable] = useState(true)
+    const [work, setWork] = useState(false)
+    const [stats, setStats] = useState(false)
+    const [issues, setIssues] = useState(false)
+    const [logs, setLogs] = useState(false)
 
-type Props = {
-    assigned: props["content"],
-    queue: props["content"],
-    returned: props["content"],
-    track: props["content"],
-}
-
-export default function Groups(props: Props) {
-    const { user, error, isLoading } = useUser();
-    const [header, setHeader] = useState([`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date`, `Action Taken`, ``])
-
-    const [view, setView] = useState('none')
-    const [dbview, setdbView] = useState('none')
-    const [psview, setpsView] = useState('none')
-    const [comview, setcomView] = useState('none')
-    const [rejview, setrejView] = useState('none')
-
-    const [action, setAction] = useState('none')
-    const [dbaction, setdbAction] = useState('none')
-    const [psaction, setpsAction] = useState('none')
-    const [comaction, setcomAction] = useState('none')
-
-    const [accept, setAccept] = useState('none')
-    const [dbaccept, setdbAccept] = useState('none')
-    const [psaccept, setpsAccept] = useState('none')
-    const [comaccept, setcomAccept] = useState('flex')
-
+    const [action, setAction] = useState(false)
     const [MDAS, setMDAS] = useState<any[]>([])
-    const [rows, setRows] = useState(props.assigned)
+    const [statrows, setStatRows] = useState<any[]>([])
+    const [logrows, setLogRows] = useState<any[]>([])
 
+    // SideBar Shenanigans
+    const [tableIcon, setTableIcon] = useState('#101010')
+    const [workIcon, setWorkIcon] = useState('#ABAAAA')
+    const [statsIcon, setStatsIcon] = useState('#ABAAAA')
+    const [issuesIcon, setIssuesIcon] = useState('#ABAAAA')
+    const [logsIcon, setLogsIcon] = useState('#ABAAAA')
 
+    // Table
+    const [xValues, setXValues] = useState<any[]>([])
+    const [yValues, setYValues] = useState<any[]>([])
 
-    const [mda, setMdapick] = useState('')
-    const [assignedgroup, setGrouppick] = useState('')
+    const [highest, setHighest] = useState(0)
 
+    const [notifications, setNotifications] = useState<any[]>([])
 
-    const [table, setTable] = useState([])
-
-
-    const [assign, setAssign] = useState(false)
-
+    // Table Toggle
+    const [queue, setQueue] = useState(true)
+    const [assigned, setAssigned] = useState(false)
+    const [returned, setReturned] = useState(false)
+    const [completed, setCompleted] = useState(false)
     const [buttonColor, setButtonColor] = useState("button_one")
     const [line, setLine] = useState("0%")
 
-    const [worktable, setWorktable] = useState(true)
-    const [logstable, setLogstable] = useState(false)
-    const [statstable, setStatstable] = useState(false)
-    const [atlas, setatlas] = useState(false)
 
-    const [pageNo, setPageNo] = useState(0)
-
-    function GetPageNo() {
-        setTimeout(() => {
-            if ((rows.length / 7) % 1 != 0) {
-                setPageNo(Math.round(rows.length / 7) + 1)
-                console.log('h');
-
-            } else {
-                setPageNo(rows.length / 7)
-                console.log('t')
-                console.log(rows.length)
-            }
-
-        }, 500);
+    const [rows, setRows] = useState<any[]>([])
+    function getAccepted() {
+        fetch('/api/get/accepted').then(response => response.json()).then((result) => setRows(result))
     }
 
+    function getAssigned() {
+        fetch('/api/get/assigned').then(response => response.json()).then((result) => setRows(result))
+    }
 
+    function getQueue() {
+        fetch('/api/get/accepted').then(response => response.json()).then((result) => setRows(result))
+    }
+
+    function getReturned() {
+        fetch('/api/get/returned/registry').then(response => response.json()).then((result) => setRows(result))
+    }
+
+    function getCompleted() {
+        fetch('/api/get/completed').then(response => response.json()).then((result) => setRows(result))
+    }
+
+    function getStats() {
+        fetch('/api/get/stats').then(response => response.json()).then((result) => setStatRows(result))
+    }
+
+    function getNotifications() {
+        fetch('/api/get/notifications/registry').then(response => response.json()).then((result) => setNotifications(result))
+
+    }
+
+    function getLogs() {
+        fetch('/api/get/logs/registry').then(response => response.json()).then((result) => setLogRows(result))
+
+    }
 
 
     useEffect(() => {
+        const size_no: number[] = []
+        const y_no: number[] = []
         const MDASArray = [...content.MDAS.A, ...content.MDAS.B, ...content.MDAS.C, ...content.MDAS.D]
+        getAccepted()
 
         setMDAS(MDASArray)
 
+        getNotifications()
+
+        getLogs()
+
+        getStats()
+
+        for (let s = 1; s <= 31; s += 2) {
+            size_no.push(s)
+
+            setXValues(size_no)
+        }
+
+        setTimeout(() => {
+            for (let j = 1; j <= 40; j += 2) {
+                y_no.push(j)
+
+                setYValues(y_no)
+            }
+
+        }, 200);
+
+        // getNumbers()
+    }, [table, stats])
+
+    function showWork() {
+        setWork(true)
+        setTable(false)
+        setStats(false)
+        setIssues(false)
+        setTableIcon('#ABAAAA')
+        setStatsIcon('#ABAAAA')
+        setIssuesIcon('#ABAAAA')
+        setWorkIcon('#101010')
+        setLogsIcon('#ABAAAA')
+        setLogs(false)
+        getQueue()
+    }
+
+    function showTable() {
+        setTable(true)
+        setWork(false)
+        setStats(false)
+        setIssues(false)
+        setLogsIcon('#ABAAAA')
+        setWorkIcon('#ABAAAA')
+        setLogs(false)
+        setTableIcon('#101010')
+        setStatsIcon('#ABAAAA')
+        setIssuesIcon('#ABAAAA')
+    }
+
+    function showStats() {
+        setTable(false)
+        setWork(false)
+        setStats(true)
+        setIssues(false)
+        setTableIcon('#ABAAAA')
+        setStatsIcon('#101010')
+        setIssuesIcon('#ABAAAA')
+        setWorkIcon('#ABAAAA')
+        setLogsIcon('#ABAAAA')
+        setLogs(false)
+
+        setTimeout(() => {
+            new Chart("myChart", {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: 'Completed',
+                        backgroundColor: "#00FFA3",
+                        borderColor: "#00FFA3",
+                        data: yValues
+                    },
+                    {
+                        label: 'Pending',
+                        backgroundColor: "#FFF48C",
+                        borderColor: "#FFF48C",
+                        data: yValues
+                    },
+                    {
+                        label: 'Returned',
+                        backgroundColor: "#FC5555",
+                        borderColor: "#FC5555",
+                        data: yValues
+                    },
+                    ]
+                },
+            });
+
+        }, 100);
 
 
-    }, [])
+    }
 
+    function showIssues() {
+        setWork(false)
+        setTable(false)
+        setStats(false)
+        setIssues(true)
+        setTableIcon('#ABAAAA')
+        setStatsIcon('#ABAAAA')
+        setWorkIcon('#ABAAAA')
+        setIssuesIcon('#101010')
+        setLogsIcon('#ABAAAA')
+        setLogs(false)
+    }
+
+    function showLogs() {
+        setWork(false)
+        setTable(false)
+        setStats(false)
+        setIssues(false)
+        setLogs(true)
+        setTableIcon('#ABAAAA')
+        setStatsIcon('#ABAAAA')
+        setWorkIcon('#ABAAAA')
+        setIssuesIcon('#ABAAAA')
+        setLogsIcon('#101010')
+        getLogs()
+    }
+
+
+    // Table Toggle
+
+    function showQueue() {
+        setQueue(true)
+        setAssigned(false)
+        setReturned(false)
+        setCompleted(false)
+        setLine('0%')
+        setButtonColor("button_one")
+        getQueue()
+    }
+
+    function showAssigned() {
+        setQueue(false)
+        setAssigned(true)
+        setReturned(false)
+        setCompleted(false)
+        setLine('100%')
+        setButtonColor("button_two")
+        getAssigned()
+    }
+
+    function showReturned() {
+        setQueue(false)
+        setAssigned(false)
+        setReturned(true)
+        setCompleted(false)
+        setLine('200%')
+        setButtonColor("button_three")
+        getReturned()
+    }
+
+    function showCompleted() {
+        setQueue(false)
+        setAssigned(false)
+        setReturned(false)
+        setCompleted(true)
+        setLine('300%')
+        setButtonColor("button_four")
+        getCompleted()
+    }
 
 
     if (user) {
-        if (user.sub == process.env.AUTH0_COM_ID || process.env.AUTH0_SUPER) {
+        if (user.sub == process.env.AUTH0_SUPER) {
             return (
-                <>
+                <main className='box-border flex w-screen h-screen overflow-hidden relative'>
+                    <SideBar worktable={showWork} logstable={showLogs} statstable={showStats} icons={{
+                        tableIcon: tableIcon,
+                        statsIcon: statsIcon,
+                        issuesIcon: issuesIcon,
+                        logsIcon: logsIcon,
+                        workIcon: workIcon
+                    }} alltable={showTable} issuestable={showIssues} />
 
-                    <main className='box-border flex w-full gap-10'>
-                    <SideBar logstable={() => { setWorktable(false); setLogstable(true); setStatstable(false); setatlas(false) }} worktable={() => { setWorktable(true); setatlas(false); setLogstable(false); setStatstable(false) }} statstable={() => { setWorktable(false); setLogstable(false); setStatstable(true) }} atlas={'flex'} atlasbutton={() => { setWorktable(false); setLogstable(false); setStatstable(false); setatlas(true) }} />
-                        <section className='box-border flex flex-col gap-16 mt-16 px-12 w-full ml-12'>
-                            <Header user_role={`Beta Tester`} username={user.name} page={`Office of the Honorable Commissioner`} />
+                    <section className='box-border flex flex-col w-full gap-16 relative h-full overflow-x-hidden'>
+                        <Header user_role={`Beta Tester`} username={user.name} page={`Office of the Commissioner`} notification={notifications} />
 
-                            <section className='box-border flex flex-col gap-4 w-full'>
-                                <header className='text-xl font-semibold'>Filters</header>
+                        <section className='flex flex-col items-end box-border h-full gap-10 p-10'>
+                            {
+                                table && (
+                                    <>
+                                        <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
+                                            <button className="flex items-center justify-center cursor-pointer bg-transparent border-none"><Image src={searchIcon} alt='' /></button>
+                                            <Button onclick={undefined}>Download Table</Button>
+                                        </div>
 
-                                <div className='flex gap-4'>
-                                    <Dropdown placeholder={`MDAS`} name={`MDAS`} content={MDAS} />
-                                    <Dropdown placeholder={`Groups`} name={`Groups`} content={content.Groups} />
-                                    <Dropdown placeholder={`Action Taken`} name={`Action Taken`} content={content.Actions.Registry} />
-                                    <SearchBar />
-                                </div>
-                            </section>
+                                        <Table
+                                            actions={[]}
+                                            headers={[]}
+                                            filelocation={'Commissioner'} content={rows} />
+                                    </>
+                                )
+                            }
 
-                            <section className='flex flex-col items-end w-full box-border gap-8'>
-                                {
-                                    worktable && (
-                                        <>
-                                        <TablesToggle clickeventone={() => { setLine("0%"); setButtonColor("button_one"); setRows([]); setRows(props.assigned); setView('none') }}
-                                            clickeventtwo={() => { setLine("100%"); setButtonColor("button_two"); setRows([]); setRows(props.queue); setcomAccept('none'); setcomAction('flex'); setcomView('none'); setHeader([`MDA`, `Group`, `File Title`, `File Number`, `Amount`, `Date`, `Days`, `Action `, ``]) }}
-                                            clickeventthree={() => { setLine("200%"); setButtonColor("button_three"); setRows([]); setRows(props.returned); setcomAccept('none'); setcomAction('none'); setcomView('flex') }}
-                                            clickeventfour={() => { setLine("300%"); setButtonColor("button_four"); setRows([]); setRows(props.track); setcomAccept('none'); setcomAction('none'); setcomView('flex') }}
-                                            buttoncolor={buttonColor} line={line}
-                                            buttonone={`Reception`} buttontwo={`Queue`} buttonthree={`Returned`} buttonfour={`Approved`}
-                                        />
-        
-                                        <Table viewbutton={view} actionbutton={action} acceptbutton={accept} pageno={pageNo} content={rows} headers={header} actions={content.Actions.Registry} dbacceptbutton={dbaccept} psacceptbutton={psaccept} comacceptbutton={comaccept} filelocation={'Commissioner'} dbactionbutton={dbaction} psactionbutton={'none'} comactionbutton={comaction} dbviewbutton={dbview} psviewbutton={psview} comviewbutton={comview} rejviewbutton={rejview} finish={'none'} />
-                                        
-                                        </>
-                                    )
-                                }
+                            {
+                                work && (
+                                    <>
+                                        <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
+                                            <button className="flex items-center justify-center cursor-pointer bg-transparent border-none"><Image src={searchIcon} alt='' /></button>
+                                            <Button onclick={undefined}>Download Table</Button>
+                                        </div>
 
-                                {
-                                    logstable && (
+                                        <TablesToggle buttoncolor={buttonColor} clickeventone={showQueue} clickeventtwo={showAssigned} clickeventthree={showReturned} clickeventfour={showCompleted} buttonone={`Queue`} buttontwo={`Assigned`} buttonthree={`Returned`} buttonfour={`Completed`} line={line} />
 
-                                        <LogsTable content={[]} pageno={undefined} viewbutton={undefined} />
-                                    )
-                                }
 
-                                {
-                                    statstable && (
-                                        <>
+                                        {
+                                            queue && (
 
-                                            <TablesToggle clickeventone={() => { setLine("0%"); setButtonColor("button_one"); setRows([]); setRows(props.assigned); setView('none'); setAccept('flex'); setHeader([`MDA`, `File Title`, `File Number`, `Amount`, `Date`, `Action Taken`, ``]) }}
-                                                clickeventtwo={() => { setLine("100%"); setButtonColor("button_two"); setRows([]); setRows([]); setAccept('none'); setAction('flex'); setView('none'); setHeader([`MDA`, `File Title`, `File Number`, `Amount`, `Date`, `Action Taken`, ``]) }}
-                                                clickeventthree={undefined}
-                                                clickeventfour={undefined}
-                                                buttoncolor={buttonColor} line={line}
-                                                buttonone={`Daily`} buttontwo={`Monthly`} buttonthree={undefined} buttonfour={undefined}
-                                            />
+                                                <Queue
+                                                    actions={[]}
+                                                    headers={[]}
+                                                    filelocation={undefined} content={rows} />
+                                            )
+                                        }
 
-                                            <StatsTable content={[]} pageno={undefined} viewbutton={undefined} />
-                                        </>
-                                    )
-                                }
-                            </section>
+                                        {
+                                            assigned && (
 
+                                                <Assigned
+                                                    actions={[]}
+                                                    headers={[]}
+                                                    filelocation={undefined} content={rows} />
+                                            )
+                                        }
+
+                                        {
+                                            returned && (
+
+                                                <Returned
+                                                    actions={[]}
+                                                    headers={[]}
+                                                    filelocation={undefined} content={rows} />
+                                            )
+                                        }
+
+                                        {
+                                            completed && (
+
+                                                <Completed
+                                                    actions={[]}
+                                                    headers={[]}
+                                                    filelocation={undefined} content={rows} />
+                                            )
+                                        }
+                                    </>
+                                )
+                            }
+
+                            {
+                                stats && (
+                                    <>
+                                        <div className="w-full flex">
+                                            <canvas id="myChart" className="w-full h-40"></canvas>
+
+                                        </div>
+                                        <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
+                                            <Button onclick={undefined}>Download Table</Button>
+                                        </div>
+
+                                        <Stats actions={[]} headers={[]} content={statrows} />
+                                    </>
+                                )
+                            }
+
+                            {
+                                issues && (
+                                    <Issues unresolved={[]} review={[]} resolved={[]} />
+                                )
+                            }
+
+                            {
+                                logs && (
+                                    <>
+                                        <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
+                                            <Button onclick={undefined}>Download Table</Button>
+                                        </div>
+
+                                        <Logs actions={[]} headers={[]} content={logrows} filelocation={undefined} />
+                                    </>
+                                )
+                            }
+
+
+                            {
+                                action && (
+                                    <QSSAction cancel={() => setAction(false)} mdas={MDAS} />
+                                )
+                            }
                         </section>
-                    </main>
-
-
-
-
-                </>
+                    </section>
+                </main>
             )
         }
-
-        else {
-            window.location.assign('/')
-        }
     }
-
+    return (
+        <></>
+    )
 }

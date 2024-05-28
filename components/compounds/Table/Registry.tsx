@@ -13,6 +13,7 @@ import COMActionModal from '@/components/molecules/COMActionModal'
 import DBActionModal from '@/components/molecules/DBActionModal'
 import PSActionModal from '@/components/molecules/PSActionModal'
 import { Notify } from "notiflix"
+import Confirm from "@/components/molecules/Confirm"
 
 export type props = {
     actions: any[],
@@ -26,8 +27,8 @@ export type props = {
         assignedGroup: any,
         actionTaken: any,
         dateGroupReceived: any,
-        dateAccepted: any,
         dateCommissonerReceived: any,
+        dateAccepted: any,
         datePSReceived: any,
         dateDBReceived: any,
         dateAppraised: any,
@@ -45,126 +46,14 @@ export default function Table(props: props) {
     const [mykey, setMykey] = useState(0)
     const [filenumber, setfilenumber] = useState(0)
     const [dateReceived, setDate] = useState(new Date())
+    const [confirm, setConfirm] = useState(false)
+    const [date, setFiledate] = useState("")
+    const [mda, setmda] = useState("")
+    const [amount, setamount] = useState("")
+    const [actionTaken, setactiontaken] = useState("")
+    const [title, settitle] = useState("")
+    const [number, setnumber] = useState("")
 
-
-    // console.log(props.content[0].dateAssigned.toString());
-
-
-    async function dothething(e: any) {
-        e.preventDefault()
-
-
-        if (props.filelocation == 'Group') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: dateReceived,
-                dateDBReceived: null,
-                dateCommissonerReceived: null,
-                datePSReceived: null
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        } else if (props.filelocation == 'DB') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: null,
-                dateDBReceived: dateReceived,
-                dateCommissonerReceived: null,
-                datePSReceived: null
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        } else if (props.filelocation == 'PS') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: null,
-                dateDBReceived: null,
-                dateCommissonerReceived: null,
-                datePSReceived: dateReceived
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        } else if (props.filelocation == 'Commissioner') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: null,
-                dateDBReceived: null,
-                dateCommissonerReceived: dateReceived,
-                datePSReceived: null
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        }
-
-    }
 
     if (props.content.length == 0) {
         return (
@@ -176,12 +65,11 @@ export default function Table(props: props) {
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Number</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Amount</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Status</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
                         <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">More</td>
                     </th>
 
-                    <tr className="flex w-full h-36 items-center justify-center">
+                    <tr className="flex w-full h-screen items-center justify-center">
                         <span className="text-2xl">Nothing to see here yet. Try other tables</span>
                     </tr>
 
@@ -211,36 +99,45 @@ export default function Table(props: props) {
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Number</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Amount</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Status</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
                         <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">More</td>
                     </th>
 
                     {props.content.map((clone, i) => (
-                        <tr key={i} className="flex rounded-lg border border-gray-200">
-                            {/* {Object.values(clone).map((incepticlone, i) => (
+                        <>
+
+                            <tr key={i} className="flex rounded-lg border relative border-gray-200">
+                                {/* {Object.values(clone).map((incepticlone, i) => (
                                 <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"key={i}><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{incepticlone as []}</span></td>
                             ))} */}
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.mda}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileTitle}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileNumber}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileAmount}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.actionTaken}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileLocation}</span></td>
-                            {
-                                clone.dateAccepted && (
-                                    <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateAccepted.substring(0, 10)}</span></td>
+                                <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.mda}</span></td>
+                                <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileTitle}</span></td>
+                                <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileNumber}</span></td>
+                                <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileAmount}</span></td>
+                                <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.actionTaken}</span></td>
+                                <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateAccepted.substring(0, 10)}</span></td>
+                                <td onClick={() => { 
+                                    setmda(clone.mda)
+                                    setamount(clone.fileAmount)
+                                    settitle(clone.fileTitle)
+                                    setnumber(clone.fileNumber)
+                                    setactiontaken(clone.actionTaken)
+                                    setFiledate(clone.dateAccepted.substring(0, 10))
+                                    setConfirm(true) }} className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
+                                    Confirm
+                                    <Image src={eyeIcon} alt="" />
+                                </td>
 
-                                )
-                            }
-                            <td className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
-                                More
-                                <Image src={eyeIcon} alt="" />
-                            </td>
-
-                        </tr>
+                            </tr>
+                        </>
                     ))}
                 </table>
+                {
+                    confirm && (
+                        <Confirm cancel={() => setConfirm(false)} mdas={[]} fileLocation={props.filelocation} date={date.substring(0, 10)} title={title} number={number} amount={amount} mda={mda} action={actionTaken} />
+                    )
+                }
+
 
 
                 {/* <TableConsole no={props.pageno} /> */}

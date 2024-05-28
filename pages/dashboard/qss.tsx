@@ -14,7 +14,8 @@ import QSSAction from "@/components/molecules/Accept"
 import content from '@/lib/dropdown-content.json'
 import Issues from "@/components/compounds/Issues/QSS"
 import Chart from 'chart.js/auto'
-import prisma from "@/lib/prisma"
+import * as XLSX from 'xlsx';
+import Logs from "@/components/compounds/Table/Logs"
 
 export default function QSS() {
     const { user } = useUser()
@@ -22,17 +23,21 @@ export default function QSS() {
     const [table, setTable] = useState(true)
     const [stats, setStats] = useState(false)
     const [issues, setIssues] = useState(false)
+    const [logs, setLogs] = useState(false)
+
     const [action, setAction] = useState(false)
     const [MDAS, setMDAS] = useState<any[]>([])
     const [statrows, setStatRows] = useState<any[]>([])
+    const [logrows, setLogRows] = useState<any[]>([])
 
     const [tableIcon, setTableIcon] = useState('#101010')
     const [statsIcon, setStatsIcon] = useState('#ABAAAA')
     const [issuesIcon, setIssuesIcon] = useState('#ABAAAA')
+    const [logsIcon, setLogsIcon] = useState('#ABAAAA')
 
     const [xValues, setXValues] = useState<any[]>([])
     const [yValues, setYValues] = useState<any[]>([])
-    
+
     const [highest, setHighest] = useState(0)
 
 
@@ -45,6 +50,11 @@ export default function QSS() {
         fetch('/api/get/stats').then(response => response.json()).then((result) => setStatRows(result))
     }
 
+    function getLogs() {
+        fetch('/api/get/logs/all').then(response => response.json()).then((result) => setLogRows(result))
+
+    }
+
     // function getNumbers() {
     //     fetch('/api/count/all/total').then(response => response.json()).then((result) => console.log(result))
     //     fetch('/api/count/all/completed').then(response => response.json()).then((result) => console.log(result))
@@ -52,9 +62,12 @@ export default function QSS() {
     //     fetch('/api/count/all/returned').then(response => response.json()).then((result) => console.log(result))
     // }
 
-    
-    
-    useEffect(() => {        
+
+
+
+    useEffect(() => {
+        const size_no: number[] = []
+        const y_no: number[] = []
         const MDASArray = [...content.MDAS.A, ...content.MDAS.B, ...content.MDAS.C, ...content.MDAS.D]
         getAll()
 
@@ -62,46 +75,58 @@ export default function QSS() {
 
         getStats()
 
+        getLogs()
+
+        for (let s = 1; s <= 31; s += 2) {
+            size_no.push(s)
+
+            setXValues(size_no)
+        }
+
+        setTimeout(() => {
+            for (let j = 1; j <= 40; j += 2) {
+                y_no.push(j)
+
+                setYValues(y_no)
+            }
+
+        }, 200);
+
         // getNumbers()
-    }, [table, stats, xValues, yValues])
+    }, [table, stats])
+
+    function DownloadAll() {
+        const worksheet = XLSX.utils.json_to_sheet(rows)
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "All Files");
+
+        XLSX.writeFile(workbook, "All Files.xlsx", { compression: true });
+    }
 
     function showTable() {
         setTable(true)
         setStats(false)
         setIssues(false)
+        setLogs(false)
         setTableIcon('#101010')
         setStatsIcon('#ABAAAA')
         setIssuesIcon('#ABAAAA')
+        setLogsIcon('#ABAAAA')
 
-        // myChart.destroy()
+        getAll()
     }
 
-    const size_no: number[] = []
-    const y_no: number[] = []
     function showStats() {
         setTable(false)
         setStats(true)
         setIssues(false)
+        setLogs(false)
         setTableIcon('#ABAAAA')
         setStatsIcon('#101010')
         setIssuesIcon('#ABAAAA')
-
-
-        for (let s = 1; s <= 31;  s+=2) {
-            size_no.push(s)
-            
-            setXValues(size_no)
-        }  
-
-        setTimeout(() => {
-            for (let j = 1; j <= 40;  j+=2) {
-                y_no.push(j)
-                
-                setYValues(y_no)
-            }  
-            
-        }, 200);
-
+        setLogsIcon('#ABAAAA')
+        getStats()
 
         setTimeout(() => {
             new Chart("myChart", {
@@ -110,36 +135,51 @@ export default function QSS() {
                     labels: xValues,
                     datasets: [{
                         label: 'Completed',
-                        backgroundColor: "rgba(0,0,255,1.0)",
-                        borderColor: "rgba(0,0,255,0.1)",
+                        backgroundColor: "#00FFA3",
+                        borderColor: "#00FFA3",
                         data: yValues
                     },
                     {
                         label: 'Pending',
-                        backgroundColor: "rgba(0,0,255,1.0)",
-                        borderColor: "rgba(0,0,255,0.1)",
+                        backgroundColor: "#FFF48C",
+                        borderColor: "#FFF48C",
                         data: yValues
                     },
                     {
                         label: 'Returned',
-                        backgroundColor: "rgba(0,0,255,1.0)",
-                        borderColor: "rgba(0,0,255,0.1)",
+                        backgroundColor: "#FC5555",
+                        borderColor: "#FC5555",
                         data: yValues
-                    }
-                ]
+                    },
+                    ]
                 },
             });
 
-        }, 500);
+        }, 100);
+
+
     }
 
     function showIssues() {
         setTable(false)
         setStats(false)
         setIssues(true)
+        setLogs(false)
         setTableIcon('#ABAAAA')
         setStatsIcon('#ABAAAA')
         setIssuesIcon('#101010')
+        setLogsIcon('#ABAAAA')
+    }
+
+    function showLogs() {
+        setTable(false)
+        setStats(false)
+        setIssues(false)
+        setLogs(true)
+        setTableIcon('#ABAAAA')
+        setStatsIcon('#ABAAAA')
+        setIssuesIcon('#ABAAAA')
+        setLogsIcon('#101010')
     }
 
 
@@ -149,14 +189,15 @@ export default function QSS() {
         if (user.sub == process.env.AUTH0_SUPER) {
             return (
                 <main className='box-border flex w-screen h-screen overflow-hidden relative'>
-                    <SideBar worktable={showTable} logstable={showIssues} statstable={showStats} icons={{
+                    <SideBar worktable={showTable} logstable={showLogs} statstable={showStats} icons={{
                         tableIcon: tableIcon,
                         statsIcon: statsIcon,
-                        issuesIcon: issuesIcon
-                    }} />
+                        issuesIcon: issuesIcon,
+                        logsIcon: logsIcon
+                    }} issuestable={showIssues} />
 
                     <section className='box-border flex flex-col w-full gap-16 relative h-full overflow-x-hidden'>
-                        <Header user_role={`Beta Tester`} username={user.name} page={`QSS`} />
+                        <Header user_role={`Beta Tester`} username={user.name} page={`QSS`} notification={[]} />
 
                         <section className='flex flex-col items-end box-border h-full gap-10 p-10'>
                             {
@@ -165,7 +206,7 @@ export default function QSS() {
                                         <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
                                             <button className="flex items-center justify-center cursor-pointer bg-transparent border-none"><Image src={searchIcon} alt='' /></button>
                                             <Button onclick={() => setAction(true)}>Add New File</Button>
-                                            <Button onclick={undefined}>Download Table</Button>
+                                            <Button onclick={DownloadAll}>Download Table</Button>
                                         </div>
 
                                         <Table
@@ -195,6 +236,18 @@ export default function QSS() {
                             {
                                 issues && (
                                     <Issues unresolved={[]} review={[]} resolved={[]} />
+                                )
+                            }
+
+                            {
+                                logs && (
+                                    <>
+                                        <div id={styles["button_holder"]} className="flex w-full justify-end gap-10 items-center">
+                                            <Button onclick={undefined}>Download Table</Button>
+                                        </div>
+                                        
+                                        <Logs actions={[]} headers={[]} content={logrows} filelocation={undefined} />
+                                    </>
                                 )
                             }
 

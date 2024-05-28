@@ -16,7 +16,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
         data : {
             fileLocation: fileInfo.fileLocation,
-            dateAssigned: fileInfo.dateAssigned,
+            dateRegistryReceived: fileInfo.dateRegistryReceived,
+            dateGroupReceived: fileInfo.dateGroupReceived,
+            dateDBReceived: fileInfo.dateDBReceived,
+            dateCommissonerReceived: fileInfo.dateCommissonerReceived,
+            datePSReceived: fileInfo.datePSReceived
         }
     })
 

@@ -5,15 +5,17 @@ import anime from 'animejs'
 import { useState } from "react"
 
 interface Props {
+    alltable: any,
     worktable: any,
     logstable: any,
-    statstable: any,
     issuestable: any,
+    statstable: any,
     icons: {
         tableIcon: any,
         statsIcon: any,
-        issuesIcon: any,
+        issuesIcon: any,        
         logsIcon: any
+        workIcon: any
     }
 }
 
@@ -35,8 +37,8 @@ export default function SideBar(props: Props) {
     }
 
     return (
-        <aside className='box-border flex flex-col gap-32 py-10 px-4 h-full z-10'>
-            <button onClick={showBar} className='flex text-base gap-2 font-semibold items-center cursor-pointer bg-transparent border-none'>
+        <aside className='box-border flex flex-col gap-32 py-10 px-4 h-full z-10 items-center'>
+            <button onClick={showBar} className='flex text-base gap-2 font-semibold items-center justify-center cursor-pointer bg-transparent border-none'>
                 <Image src={menuIcon} alt='' />
                 {
                     show && (
@@ -48,7 +50,7 @@ export default function SideBar(props: Props) {
             </button>
 
             <div className='flex flex-col gap-12 items-start'>
-                <button onClick={props.worktable} className='flex text-base gap-2 font-semibold items-center justify-center cursor-pointer bg-transparent border-none' title='Action Tables'>
+                <button onClick={props.alltable} className='flex text-base gap-2 font-semibold items-center justify-center cursor-pointer bg-transparent border-none' title='Action Tables'>
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M18.6667 29.3332H13.3334C8.30535 29.3332 5.79069 29.3332 4.22935 27.7705C2.66669 26.2092 2.66669 23.6945 2.66669 18.6665V13.3332C2.66669 8.30517 2.66669 5.7905 4.22935 4.22917C5.79069 2.6665 8.31869 2.6665 13.3734 2.6665C14.1814 2.6665 14.828 2.6665 15.3734 2.68917C15.356 2.79584 15.3467 2.90384 15.3467 3.0145L15.3334 6.79317C15.3334 8.25584 15.3334 9.54917 15.4734 10.5905C15.6254 11.7198 15.9734 12.8492 16.896 13.7718C17.816 14.6918 18.9467 15.0412 20.076 15.1932C21.1174 15.3332 22.4107 15.3332 23.8734 15.3332H29.276C29.3334 16.0452 29.3334 16.9198 29.3334 18.0838V18.6665C29.3334 23.6945 29.3334 26.2092 27.7707 27.7705C26.2094 29.3332 23.6947 29.3332 18.6667 29.3332Z" fill={props.icons.tableIcon} />
                         <path d="M25.8026 10.1562L20.5226 5.40548C19.02 4.05215 18.2693 3.37482 17.3453 3.02148L17.3333 6.66682C17.3333 9.80948 17.3333 11.3815 18.3093 12.3575C19.2853 13.3335 20.8573 13.3335 24 13.3335H28.7733C28.2906 12.3948 27.424 11.6162 25.8026 10.1562Z" fill="#101010" />
@@ -58,6 +60,21 @@ export default function SideBar(props: Props) {
                         show && (
                             <>
                                 Files
+                            </>
+                        )
+                    }
+                </button>
+
+                <button onClick={props.worktable} className='flex text-base gap-2 font-semibold items-center justify-center cursor-pointer bg-transparent border-none' title='Activity Logs'>
+                    <svg width="40" height="40" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.40196 7.17292C3.14196 4.83892 5.54496 3.12492 7.66796 4.13092L19.612 9.78892C21.9 10.8719 21.9 14.1279 19.612 15.2109L7.66796 20.8699C5.54496 21.8759 3.14296 20.1619 3.40196 17.8279L3.88196 13.4999H12C12.2652 13.4999 12.5195 13.3946 12.7071 13.207C12.8946 13.0195 13 12.7651 13 12.4999C13 12.2347 12.8946 11.9803 12.7071 11.7928C12.5195 11.6053 12.2652 11.4999 12 11.4999H3.88296L3.40196 7.17292Z" fill={props.icons.workIcon} />
+                    </svg>
+
+
+                    {
+                        show && (
+                            <>
+                                Actions
                             </>
                         )
                     }
@@ -77,7 +94,7 @@ export default function SideBar(props: Props) {
                     }
                 </button>
 
-                <button onClick={props.issuestable} className='flex text-base gap-2 font-semibold items-center justify-center cursor-pointer bg-transparent border-none' title='Issues'>
+                <button onClick={props.issuestable} className='flex text-base gap-2 font-semibold items-center justify-center cursor-pointer bg-transparent border-none' title='Report Issues'>
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.33335 26.6668C4.60002 26.6668 3.97246 26.4059 3.45069 25.8842C2.92891 25.3624 2.66758 24.7344 2.66669 24.0002V8.00016C2.66669 7.26683 2.92802 6.63927 3.45069 6.1175C3.97335 5.59572 4.60091 5.33438 5.33335 5.3335H26.6667C27.4 5.3335 28.028 5.59483 28.5507 6.1175C29.0734 6.64016 29.3342 7.26772 29.3334 8.00016V24.0002C29.3334 24.7335 29.0725 25.3615 28.5507 25.8842C28.0289 26.4068 27.4009 26.6677 26.6667 26.6668H5.33335ZM16 17.3335L26.6667 10.6668V8.00016L16 14.6668L5.33335 8.00016V10.6668L16 17.3335Z" fill={props.icons.issuesIcon} />
                     </svg>

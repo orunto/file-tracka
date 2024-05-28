@@ -12,24 +12,33 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const total = await prisma.filerecords.count()
-    const completed = await prisma.filerecords.count({where: {actionTaken: 'Completed'}})
-    const pending = await prisma.filerecords.count({where: {actionTaken: 'Assigned' || 'Approved' || 'Appraised' || 'Recommended' || 'Accepted'}})
-    const returned = await prisma.filerecords.count({where: {actionTaken: 'Returned'}})
+    const completed = await prisma.filerecords.count({ where: { actionTaken: 'Completed' } })
+    const assigned = await prisma.filerecords.count({ where: { actionTaken: 'Assigned' } })
+    const approved = await prisma.filerecords.count({ where: { actionTaken: 'Approved' } })
+    const appraised = await prisma.filerecords.count({ where: { actionTaken: 'Appraised' } })
+    const accepted = await prisma.filerecords.count({ where: { actionTaken: 'Accepted' } })
+    const returned = await prisma.filerecords.count({ where: { actionTaken: 'Returned' } })
 
     const dateRecord = new Date()
 
     const newday = await prisma.dailySummary.upsert({
         create: {
             date: new Date(),
+            day: dateRecord.getDate(),
             numberOfFiles: total,
             completed: completed,
-            pending: pending,
+            pending: assigned + approved + accepted + appraised,
             returned: returned
         },
         where: {
-            date: new Date(),
+            day: dateRecord.getDate(),
         },
-        update: {}
+        update: {
+            numberOfFiles: total + 1,
+            completed: completed,
+            pending: (assigned + approved + accepted + appraised) + 1,
+            returned: returned
+        }
     })
 
     res.json(newday)

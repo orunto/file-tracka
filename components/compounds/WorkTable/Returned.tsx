@@ -1,7 +1,7 @@
 'use client'
 
 import TableConsole from "@/components/molecules/TableConsole"
-import eyeIcon from '@/public/icons/mdi_eye.svg'
+import workIcon from '@/public/icons/mage_pen-fill.svg'
 import Image from "next/image"
 import DetailsModal from "@/components/molecules/DetailsModal"
 import { useEffect, useState } from "react"
@@ -26,7 +26,6 @@ export type props = {
         assignedGroup: any,
         actionTaken: any,
         dateGroupReceived: any,
-        dateAccepted: any,
         dateCommissonerReceived: any,
         datePSReceived: any,
         dateDBReceived: any,
@@ -37,134 +36,16 @@ export type props = {
         dateReturnedtoRegistry: any,
         fileLocation: any,
         groupDays: any,
+        dateAccepted: any,
+        dateReturnedtoGroup: any
     }[],
     filelocation: any,
 }
-export default function Table(props: props) {
+export default function WorkTable(props: props) {
     const { user, error, isLoading } = useUser();
     const [mykey, setMykey] = useState(0)
     const [filenumber, setfilenumber] = useState(0)
     const [dateReceived, setDate] = useState(new Date())
-
-
-    // console.log(props.content[0].dateAssigned.toString());
-
-
-    async function dothething(e: any) {
-        e.preventDefault()
-
-
-        if (props.filelocation == 'Group') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: dateReceived,
-                dateDBReceived: null,
-                dateCommissonerReceived: null,
-                datePSReceived: null
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        } else if (props.filelocation == 'DB') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: null,
-                dateDBReceived: dateReceived,
-                dateCommissonerReceived: null,
-                datePSReceived: null
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        } else if (props.filelocation == 'PS') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: null,
-                dateDBReceived: null,
-                dateCommissonerReceived: null,
-                datePSReceived: dateReceived
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        } else if (props.filelocation == 'Commissioner') {
-            const newfiledata = {
-                fileNumber: filenumber,
-                fileLocation: props.filelocation,
-                dateGroupReceived: null,
-                dateDBReceived: null,
-                dateCommissonerReceived: dateReceived,
-                datePSReceived: null
-            }
-
-            const response = await fetch('/api/accept', {
-                method: 'POST',
-                body: JSON.stringify(newfiledata)
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            } else {
-                Notify.success('File accepted')
-
-                setTimeout(() => {
-                    window.location.reload()
-                }, 500);
-            }
-
-            return await response.json()
-
-        }
-
-    }
 
     if (props.content.length == 0) {
         return (
@@ -178,10 +59,10 @@ export default function Table(props: props) {
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Status</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
-                        <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">More</td>
+                        <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">Action</td>
                     </th>
 
-                    <tr className="flex w-full h-36 items-center justify-center">
+                    <tr className="flex w-full h-screen items-center justify-center">
                         <span className="text-2xl">Nothing to see here yet. Try other tables</span>
                     </tr>
 
@@ -194,8 +75,8 @@ export default function Table(props: props) {
                         <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
                         <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
                         <td className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
-                            More
-                            <Image src={eyeIcon} alt="" />
+                            Action
+                            <Image src={workIcon} alt="" />
                         </td>
                     </tr> */}
                 </table>
@@ -213,7 +94,7 @@ export default function Table(props: props) {
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Status</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
-                        <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">More</td>
+                        <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">Action</td>
                     </th>
 
                     {props.content.map((clone, i) => (
@@ -228,19 +109,31 @@ export default function Table(props: props) {
                             <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.actionTaken}</span></td>
                             <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileLocation}</span></td>
                             {
-                                clone.dateAccepted && (
-                                    <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateAccepted.substring(0, 10)}</span></td>
+                                clone.dateReturnedtoRegistry && (
+                                    <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateReturnedtoRegistry.substring(0, 10)}</span></td>
+
+                                )
+                            }
+
+{
+                                clone.dateReturnedtoGroup && (
+                                    <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateReturnedtoGroup.substring(0, 10)}</span></td>
 
                                 )
                             }
                             <td className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
-                                More
-                                <Image src={eyeIcon} alt="" />
+                                Action
+                                <Image src={workIcon} alt="" />
                             </td>
 
                         </tr>
                     ))}
+
+                    {
+                        
+                    }
                 </table>
+                
 
 
                 {/* <TableConsole no={props.pageno} /> */}

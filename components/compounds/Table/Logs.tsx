@@ -37,6 +37,10 @@ export type props = {
         dateReturnedtoRegistry: any,
         fileLocation: any,
         groupDays: any,
+        date: any,
+        fileName: any,
+        action: any,
+        user: any,
     }[],
     filelocation: any,
 }
@@ -171,13 +175,11 @@ export default function Table(props: props) {
             <div className="flex flex-col justify-between w-full pb-10 overflow-scroll h-screen" style={{ zIndex: '2' }}>
                 <table className="w-max flex flex-col h-max">
                     <th className="flex w-max">
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">MDA</td>
+                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Date</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Name</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Number</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Amount</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Status</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
+                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Action</td>
+                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">User</td>
                         <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">More</td>
                     </th>
 
@@ -206,13 +208,11 @@ export default function Table(props: props) {
             <div className="flex flex-col justify-between w-full pb-10 overflow-scroll h-screen" style={{ zIndex: '2' }}>
                 <table className="w-max flex flex-col h-max">
                     <th className="flex w-max">
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">MDA</td>
+                    <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Date</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Name</td>
                         <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">File Number</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Amount</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Status</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Location</td>
-                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-32 text-black text-base font-semibold">Date</td>
+                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">Action</td>
+                        <td style={{ background: '#CAD9D0' }} className=" flex px-8 py-4 justify-start w-72 text-black text-base font-semibold">User</td>
                         <td className="flex px-8 py-4 justify-start w-max text-transparent text-base font-semibold border-none">More</td>
                     </th>
 
@@ -221,18 +221,11 @@ export default function Table(props: props) {
                             {/* {Object.values(clone).map((incepticlone, i) => (
                                 <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"key={i}><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{incepticlone as []}</span></td>
                             ))} */}
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.mda}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileTitle}</span></td>
+                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.date.substring(0, 10)}</span></td>
+                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileName}</span></td>
                             <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileNumber}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileAmount}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.actionTaken}</span></td>
-                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.fileLocation}</span></td>
-                            {
-                                clone.dateAccepted && (
-                                    <td className="flex px-8 py-4 justify-start w-32 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.dateAccepted.substring(0, 10)}</span></td>
-
-                                )
-                            }
+                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.action}</span></td>
+                            <td className="flex px-8 py-4 justify-start w-72 text-black text-base font-semibold"><span className="overflow-ellipsis w-full whitespace-nowrap overflow-hidden">{clone.user}</span></td>
                             <td className="flex items-center gap-2 px-8 py-4 justify-start w-max text-green-500 text-base font-semibold cursor-pointer">
                                 More
                                 <Image src={eyeIcon} alt="" />
