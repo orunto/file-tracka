@@ -1,40 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Softdrobe App
+The prototype codebase for the BIT org tool
 
-## Getting Started
+## Stack
+This is a nextjs project bootstrapped with create-next-app but with the pnpm package manager. To get started clone the repo and install node modules using pnpm. Trust me it's just better that way 😉
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+``` 
+git clone https://github.com/orunto/file-tracka.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```
+pnpm install
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- Styling is done with a combination of SASS and [`Tailwindcss`](https://v2.tailwindcss.com/docs/).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Animation with the [`Animejs`](https://animejs.com/documentation/) and the [`AOS Library`](https://github.com/michalsnik/aos/) for simple scroll transitions
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- The site makes use of a in-app APIs, all documented below.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Structure
+```
+├───components
+│   ├───atoms
+│   ├───molecules
+│   ├───compounds
+│   └───mixtures   
+├───lib
+├───pages
+├───prisma
+├───public
+└───styles
+```
 
-## Learn More
+- Atom components are single function uncomplicated components like buttons 
+- Molecules are more complex and contain two or more atom components e.g Navbars
+- Compounds contain multiple molecule and atom components e.g Modal popups
+- Mixtures contain multiple compounds, molecule and atom components e.g Dashboards
 
-To learn more about Next.js, take a look at the following resources:
+## Utitlity Packages
+- [`Notiflix`](https://notiflix.github.io/) for popup notifications and loading screens
+- [`Push`](https://pushjs.org/#) for external notifications
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Functionality
+The app has seven core dashboard formats
+### QSS
+- Can input files into the system (Sends an e-receipt to the other party immediately to acknowledge)
+- 
